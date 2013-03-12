@@ -15,7 +15,6 @@ class DasBoot < Sinatra::Base
   end
 
   configure do
-    $redis = Redis.new
     $mpd = MPC.instance.setup(_mpd_host, _mpd_port)
   end
 

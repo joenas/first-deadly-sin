@@ -16,11 +16,6 @@ class DasBoot < Sinatra::Base
     $mpd.info.to_json
   end
 
-  get '/image.json' do
-    image = ImageFetcher.new($redis).fetch(params[:artist])
-  end
-
-
   get '/volume.json' do
     $mpd.vol params[:vol]
     $mpd.info.to_json
