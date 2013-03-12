@@ -7,11 +7,8 @@ gem 'sinatra-reloader'
 gem 'thin'
 gem 'faye'
 gem 'mpd'
-gem 'redis'
-gem 'sidekiq'
 
 # assets
-gem 'slim'
 gem 'haml'
 gem 'sass'
 gem 'coffee-script'
