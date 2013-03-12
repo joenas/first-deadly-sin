@@ -1,0 +1,16 @@
+!!!
+%html
+  %head
+    %title Dasboot
+    %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}/
+    %link{:href => "http://fonts.googleapis.com/css?family=Dosis|Anaheim|Armata|Monda|Merriweather+Sans:400,300|Titillium+Web|Scada", :rel => "stylesheet", :type => "text/css"}/
+
+
+    = css :app
+
+  %body
+    .content
+      = yield
+
+    = js :vendor
+    = js :app
