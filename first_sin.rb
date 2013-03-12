@@ -1,4 +1,4 @@
-class DasBoot < Sinatra::Base
+class FirstSin < Sinatra::Base
   # Setup
   set :root, File.dirname(__FILE__)
   set :views, Proc.new { File.join(root, "app/views") }

@@ -1,10 +1,4 @@
-class DasBoot < Sinatra::Base
-  # # Routes
-  # get %r{/js/(application|app.min.js)} do
-  #   coffee :'../assets/js/application'
-  # end
-
-
+class FirstSin < Sinatra::Base
   get %r{/mpd/?(.*).json} do |command|
     content_type :json
 
