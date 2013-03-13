@@ -16,35 +16,8 @@ $ ->
   # Get a new artist image from Last.fm via jsonp
   # When found calls the `callback` with the image url as the first argument
   artistImage = (artist, callback) ->
-    cb = ->
-      callback cache[artist].random()
-
-    cache = artistImage.cache
-    artist = encodeURI(artist)
-
-    $.cl cache[artist]
-    # Deliver from cache
-    if cache.hasOwnProperty(artist)
-
-      # execute the callback asynchronously to minimize codepaths
-      setTimeout cb, 10
-      return
-    $.cl('derp')
-    # Load
-    last_fm_uri = "http://ws.audioscrobbler.com/2.0/?format=json&method=artist.getimages&artist=%s&api_key=e37be5627a5ca3106743f138b2220f12"
-    $.ajax
-      url: last_fm_uri.replace("%s", artist)
-      dataType: "jsonp"
-      success: (obj) ->
-        if obj.images.image
-          cache[artist] = $.map(obj.images.image, (img) ->
-            img.sizes.size[0]["#text"]
-          )
-          cb()
-        else
-          callback()
-
-  artistImage.cache = {}
+    $.get '/image.json', {artist: artist}, (data) ->
+      callback data['url']
 
   ###
   Faye!
@@ -146,7 +119,6 @@ $ ->
   $(document).on "click", 'a.mpd_volume', (e) ->
     volume = $(this).data('volume')
     $.get('/volume.json', {vol: volume}, (data) ->
-      $.cl data
     )
     e.preventDefault()
 
@@ -161,33 +133,26 @@ $ ->
   mpdInfo = () ->
     $.get '/mpd.json', (data) ->
       $('a[data-action=random]').addClass('active') if (data['random'])
-
       $('a[data-action=repeat]').addClass('active') if (data['repeat'])
-
       activeButton(data['state'])
       updatePlayer(data)
       return true
-
 
   mpdDo = (action) ->
     $.get '/mpd/'+ action + '.json', (data) ->
       updatePlayer(data)
 
-
   updatePlayer = (data) ->
-
     unless data['error']?
       data['song_elapsed'] = songElapsed(data['time'])
       template = _.template(tmpl['mpd-info'], {data: data})
       $('#mpd-info').html(template)
       artistImage data['artist'], (url) ->
         $("body").background url
-
     else
       $('.alert').show()
       $('.alert-message').html(data['error'])
       $('#mpd-info').html('')
-
 
   activeButton = (action) ->
     clearClass('a[data-clear=true]', 'active')
@@ -200,11 +165,8 @@ $ ->
       $('a.mpd_'+action).removeClass('active')
 
   songElapsed = (time) ->
-
     return 0 if (typeof time == 'number')
-
     t = time.split(':')
-
     return Math.round(t[0]/t[1]*100) + "%"
 
   setInterval( () ->
@@ -219,9 +181,6 @@ $ ->
   mpdInfo()
 
   $.get '/playlist.json', (data) ->
-      $.cl data
-      template = _.template(tmpl['mpd-playlist'], {data: data})
-      $('#mpd-playlist').html(template)
-      return true
-
-
+    template = _.template(tmpl['mpd-playlist'], {data: data})
+    $('#mpd-playlist').html(template)
+    return true

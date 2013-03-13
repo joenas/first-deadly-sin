@@ -1,10 +1,4 @@
-class DasBoot < Sinatra::Base
-  # # Routes
-  # get %r{/js/(application|app.min.js)} do
-  #   coffee :'../assets/js/application'
-  # end
-
-
+class FirstSin < Sinatra::Base
   get %r{/mpd/?(.*).json} do |command|
     content_type :json
 
@@ -17,9 +11,13 @@ class DasBoot < Sinatra::Base
   end
 
   get '/image.json' do
-    image = ImageFetcher.new($redis).fetch(params[:artist])
+    content_type :json
+    if artist = params[:artist]
+      image = ImageFetcher.new(artist, settings.images, $redis).fetch
+       url = "images/artists/#{image}"
+    end
+    {:url => url}.to_json
   end
-
 
   get '/volume.json' do
     $mpd.vol params[:vol]
