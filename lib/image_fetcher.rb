@@ -36,7 +36,7 @@ class ImageFetcher
 private
   def fetch_new_images
     response = JSON.parse(open(AS_URI % @artist_encoded).read)
-    urls = response['images']['image'].map { |image| puts image.inspect; } #image['sizes']['size'].first['#text'] }
+    urls = response['images']['image'].map { |image| image['sizes']['size'].first['#text'] }
     @image = fetch_and_persist(urls.pop)
     fetch_async(urls)
   end
