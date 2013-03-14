@@ -1,10 +1,10 @@
 class FirstSin < Sinatra::Base
-  get %r{/mpd/?(.*).json} do |command|
+  get '/mpd.json' do
     content_type :json
 
-    unless command.empty?
+    if command = params[:action]
       $mpd.do command
-      broadcast('/foo', { text: "MPD #{command}", action: "mpd" } )
+      broadcast('/first-sin/mpd', { text: "MPD #{command}", action: "mpd" } )
     end
 
     $mpd.info.to_json
@@ -14,9 +14,27 @@ class FirstSin < Sinatra::Base
     content_type :json
     if artist = params[:artist]
       image = ImageFetcher.new(artist, settings.images, $redis).fetch
-       url = "images/artists/#{image}"
+      url = "images/artists/#{image}"
     end
-    {:url => url}.to_json
+    {:url => url, :image => image}.to_json
+  end
+
+  get '/favorite.json' do
+    content_type :json
+    if params[:image]
+      artist, image = params[:image].split("/")
+      status = ImageHandler.new(artist, image, settings.images).favorite
+    end
+    {:status => status}.to_json
+  end
+
+  get '/remove.json' do
+    content_type :json
+    if params[:image]
+      artist, image = params[:image].split("/")
+      status = ImageHandler.new(artist, image, settings.images).remove
+    end
+    {:status => status}.to_json
   end
 
   get '/volume.json' do
@@ -39,10 +57,7 @@ class FirstSin < Sinatra::Base
 
   get '/commands.json' do
     content_type :json
-    puts $mpd.info[:volume]
-    puts derp = $mpd.controller.commands.inspect
-    derp.to_json
-   # $mpd.commands.to_json
+    $mpd.controller.commands.inspect.to_json
   end
 
   get '/*' do

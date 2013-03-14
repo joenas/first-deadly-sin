@@ -20,6 +20,7 @@ body {
   background-size: cover;
   color: white;
   font: 1.5em Helvetica, sans-serif;
+  background-image: url('/images/artists/default.jpg');
 }
 
 /* Overlay image */
@@ -95,6 +96,30 @@ body:before {
     font-size: 0.6em;
     font-family: 'Titillium Web', sans-serif;
   }
+}
+
+#img-buttons {
+  i {
+    color: #000;
+    &:hover { color: red; }
+  }
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  opacity: .5;
+  background: #fff;
+  padding: 0em;
+  -webkit-border-radius: .4em;
+    -moz-border-radius: .4em;
+    -o-border-radius: .4em;
+  border-radius: .4em;
+  border: .1em solid #fff;
+
+  .icon-plus {
+    &:hover { color: green; }
+  }
+  .icon-ok {color: green; &:hover { color: green; }}
+  .icon-remove {color: red;}
 }
 
 #progress-bar {

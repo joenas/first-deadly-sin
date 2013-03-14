@@ -9,6 +9,7 @@ class ImageFetcher
 
   API_KEY = "e37be5627a5ca3106743f138b2220f12"
   AS_URI = "http://ws.audioscrobbler.com/2.0/?format=json&method=artist.getimages&artist=%s&api_key=#{API_KEY}"
+  DEFAULT_IMAGE = 'default.jpg'
 
   def initialize(artist, base_path, redis = Redis.new)
     @base_path = base_path
@@ -21,8 +22,11 @@ class ImageFetcher
 
   def fetch
     fetch_new_images unless @redis.scard(@key) > 0
-    image = @image || @redis.srandmember(@key)
-    "#{@artist}/#{image}"
+    if image = @image || @redis.srandmember(@key)
+      return "#{@artist}/#{image}"
+    else
+      return DEFAULT_IMAGE
+    end
   end
 
   def fetch_and_persist(url)
@@ -36,9 +40,12 @@ class ImageFetcher
 private
   def fetch_new_images
     response = JSON.parse(open(AS_URI % @artist_encoded).read)
-    urls = response['images']['image'].map { |image| image['sizes']['size'].first['#text'] }
-    @image = fetch_and_persist(urls.pop)
-    fetch_async(urls)
+    images = response['images']['image']
+    if images
+      urls = images.map { |image| image['sizes']['size'].first['#text'] } 
+      @image = fetch_and_persist(urls.pop)
+      fetch_async(urls)
+    end
   end
 
   def fetch_async(urls)
@@ -63,5 +70,5 @@ private
 end
 
 # path = File.expand_path(File.join(File.dirname(__FILE__), '../app/images/artists'))
-# image =ImageFetcher.new('kid 606', path).fetch
+# image =ImageFetcher.new('kineser', path).fetch
 # puts image

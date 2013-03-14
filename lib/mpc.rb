@@ -20,11 +20,7 @@ class MPC
   end
 
   def vol(method)
-    if method == 'up'
-      @mpd.do 'setvol', self.info[:volume] + @volume_change
-    elsif method == 'down'
-      @mpd.do 'setvol', self.info[:volume] - @volume_change
-    end
+    @mpd.do 'setvol', self.info[:volume].send(method, @volume_change)
   end
 
   def connect

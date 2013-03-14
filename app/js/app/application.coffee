@@ -18,6 +18,8 @@ $ ->
   artistImage = (artist, callback) ->
     $.get '/image.json', {artist: artist}, (data) ->
       callback data['url']
+      $('.image_favorite, .image_remove').each (index, element)->
+        $(element).attr('data-image', data['image'])
 
   ###
   Faye!
@@ -25,7 +27,7 @@ $ ->
 
   client = new Faye.Client 'http://' + location.hostname + ':9292/faye'
 
-  subscription = client.subscribe '/foo', (msg) ->
+  subscription = client.subscribe '/first-sin/mpd', (msg) ->
     #fayeStatusMsg(msg.text)
     fayeActionHandler(msg.action) if msg.action?
 
@@ -83,14 +85,25 @@ $ ->
   $(document).on "click", 'i.close', () ->
     $('div.alert').hide()
 
-  # Menu: MPD
-  $(document).on "click", 'a[data-menu=mpd]', () ->
-    mpdInfo()
 
-  # Close button
-  $(document).on "click", 'button[data-dismiss=alert]', () ->
-    $(@).parent().hide()
+  ###
+  Image buttons
+  ###
 
+  # Favorite button
+  $(document).on "click", '.image_favorite', () ->
+    image = $(@).data('image')
+    $.get('/favorite.json', {image: image}, (data) ->
+      $.cl data
+    )
+
+  # Remove button
+  $(document).on "click", '.image_remove', () ->
+    image = $(@).data('image')
+    $.get('/remove.json', {image: image}, (data) ->
+      if (data['status'] == true)
+        mpdInfo()
+    )
 
   ###
   MPD page
@@ -101,13 +114,9 @@ $ ->
     action = $(this).data('action')
     toggle = $(this).data('toggle')
     clear  = $(this).data('clear')
-
     clearClass('a[data-clear=true]', 'active') if (clear)
-
     $(@).toggleClass('active') if  ( toggle )
-
     mpdDo(action)
-
     e.preventDefault()
 
   # Update button
@@ -139,12 +148,11 @@ $ ->
       return true
 
   mpdDo = (action) ->
-    $.get '/mpd/'+ action + '.json', (data) ->
+    $.get '/mpd.json', {action: action}, (data) ->
       updatePlayer(data)
 
   updatePlayer = (data) ->
     unless data['error']?
-      data['song_elapsed'] = songElapsed(data['time'])
       template = _.template(tmpl['mpd-info'], {data: data})
       $('#mpd-info').html(template)
       artistImage data['artist'], (url) ->
@@ -163,11 +171,6 @@ $ ->
       $('a.mpd_'+action).addClass('active')
     else
       $('a.mpd_'+action).removeClass('active')
-
-  songElapsed = (time) ->
-    return 0 if (typeof time == 'number')
-    t = time.split(':')
-    return Math.round(t[0]/t[1]*100) + "%"
 
   setInterval( () ->
     mpdInfo()
