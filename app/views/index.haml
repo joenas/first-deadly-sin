@@ -1,23 +1,23 @@
 #mpd-info
 
 #mpd-buttons.btn-group
-  %a.mpd_control{:href => 'javascript:;', "data-action" => "prev"}
+  %a.mpd_control{"data-action" => "prev"}
     %i.icon-backward
-  %a.mpd_control{:href => 'javascript:;', "data-action" => "play", "data-clear" => "true", "data-toggle" => "true"}
+  %a.mpd_control{"data-action" => "play", "data-clear" => "true", "data-toggle" => "true"}
     %i.icon-play
-  %a.mpd_control{:href => 'javascript:;', "data-action" => "pause", "data-clear" => "true", "data-toggle" => "true"}
+  %a.mpd_control{"data-action" => "pause", "data-clear" => "true", "data-toggle" => "true"}
     %i.icon-pause
-  %a.mpd_control{:href => 'javascript:;', "data-action" => "stop", "data-clear" => "true", "data-toggle" => "true"}
+  %a.mpd_control{"data-action" => "stop", "data-clear" => "true", "data-toggle" => "true"}
     %i.icon-stop
-  %a.mpd_control{:href => 'javascript:;', "data-action" => "next"}
+  %a.mpd_control{"data-action" => "next"}
     %i.icon-forward
-  %a.mpd_volume{:href => 'javascript:;', 'data-volume' => 'down'}
+  %a.mpd_volume{'data-volume' => '-'}
     %i.icon-volume-down
-  %a.mpd_volume{:href => 'javascript:;', 'data-volume' => 'up'}
+  %a.mpd_volume{'data-volume' => '+'}
     %i.icon-volume-up
 
 
-  %a.mpd_update{:href => 'javascript:;'}
+  %a.mpd_update
     %i.icon-repeat
 
 #mpd-playlist
