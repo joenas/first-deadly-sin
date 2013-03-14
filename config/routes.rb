@@ -1,12 +1,12 @@
 class FirstSin < Sinatra::Base
   get '/mpd.json' do
     content_type :json
-
     if command = params[:action]
       $mpd.do command
       broadcast('/first-sin/mpd', { text: "MPD #{command}", action: "mpd" } )
+    elsif vol_change = params[:vol]
+      $mpd.vol params[:vol]
     end
-
     $mpd.info.to_json
   end
 
@@ -19,7 +19,7 @@ class FirstSin < Sinatra::Base
     {:url => url, :image => image}.to_json
   end
 
-  get '/favorite.json' do
+  put '/image.json' do
     content_type :json
     if params[:image]
       artist, image = params[:image].split("/")
@@ -28,7 +28,7 @@ class FirstSin < Sinatra::Base
     {:status => status}.to_json
   end
 
-  get '/remove.json' do
+  delete '/image.json' do
     content_type :json
     if params[:image]
       artist, image = params[:image].split("/")
@@ -37,12 +37,7 @@ class FirstSin < Sinatra::Base
     {:status => status}.to_json
   end
 
-  get '/volume.json' do
-    $mpd.vol params[:vol]
-    $mpd.info.to_json
-  end
-
-  get '/playlist.json' do
+  get '/mpd/playlist.json' do
     content_type :json
 
     $mpd.playlist.map do |file|
@@ -55,6 +50,7 @@ class FirstSin < Sinatra::Base
     end.to_json if $mpd.active?
   end
 
+  # just for testing
   get '/commands.json' do
     content_type :json
     $mpd.controller.commands.inspect.to_json

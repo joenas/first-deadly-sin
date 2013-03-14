@@ -100,10 +100,14 @@ $ ->
   # Remove button
   $(document).on "click", '.image_remove', () ->
     image = $(@).data('image')
-    $.get('/remove.json', {image: image}, (data) ->
-      if (data['status'] == true)
-        mpdInfo()
-    )
+    $.ajax
+      url: '/image.json'
+      type: 'delete'
+      data: {image: image}
+      success: (data) ->
+        if (data['status'] == true)
+          mpdInfo()
+
 
   ###
   MPD page
@@ -127,7 +131,7 @@ $ ->
   # Volume button
   $(document).on "click", 'a.mpd_volume', (e) ->
     volume = $(this).data('volume')
-    $.get('/volume.json', {vol: volume}, (data) ->
+    $.get('/mpd.json', {vol: volume}, (data) ->
     )
     e.preventDefault()
 
