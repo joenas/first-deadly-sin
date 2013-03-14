@@ -92,22 +92,21 @@ $ ->
 
   # Favorite button
   $(document).on "click", '.image_favorite', () ->
-    image = $(@).data('image')
-    $.get('/favorite.json', {image: image}, (data) ->
-      $.cl data
-    )
+    $.ajax
+      url: '/image.json'
+      type: 'put'
+      data: {image: $(@).data('image')}
+
 
   # Remove button
   $(document).on "click", '.image_remove', () ->
-    image = $(@).data('image')
     $.ajax
       url: '/image.json'
       type: 'delete'
-      data: {image: image}
+      data: {image: image = $(@).data('image')}
       success: (data) ->
         if (data['status'] == true)
           mpdInfo()
-
 
   ###
   MPD page
