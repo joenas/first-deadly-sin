@@ -116,28 +116,19 @@ $ ->
     action = $(this).data('action')
     toggle = $(this).data('toggle')
     clear  = $(this).data('clear')
-
     clearClass('a[data-clear=true]', 'active') if (clear)
-
     $(@).toggleClass('active') if  ( toggle )
-
     mpdDo(action)
-
-    e.preventDefault()
 
   # Update button
   $(document).on "click", 'a.mpd_update', (e) ->
     mpdInfo()
-    e.preventDefault()
 
   # Volume button
   $(document).on "click", 'a.mpd_volume', (e) ->
-    volume = $(this).data('volume')
-    $.get '/mpd.json', {vol: volume}
-
+    $.get '/mpd.json', {vol: $(this).data('volume')}
 
   # MPD functions!
-
   clearClass = (selector, klass) ->
     $(selector).each ->
       $(@).removeClass(klass)
