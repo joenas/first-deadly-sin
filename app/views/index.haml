@@ -30,9 +30,6 @@
   %h1 {{= data['title'] }}
   %h2 {{= data['artist'] }}
   %h3 {{= data['album'] }}
-  / .span3#progress-bar
-  /   .progress.progress-striped.active
-  /     .bar{:style => "width: {{= data['song_elapsed'] }};"}
 
 %script#tmpl-mpd-playlist{:type => "html/template"}
   {{ _.each(data, function(song, index){ }}
