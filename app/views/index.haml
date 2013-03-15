@@ -1,23 +1,21 @@
 #mpd-info
 
 #mpd-buttons.btn-group
-  %a.mpd_control{"data-action" => "prev"}
+  %a.mpd_control{:href => "#", "data-action" => "previous"}
     %i.icon-backward
-  %a.mpd_control{"data-action" => "play", "data-clear" => "true", "data-toggle" => "true"}
+  %a.mpd_control{:href => "#", "data-action" => "play", "data-clear" => "true", "data-toggle" => "true"}
     %i.icon-play
-  %a.mpd_control{"data-action" => "pause", "data-clear" => "true", "data-toggle" => "true"}
+  %a.mpd_control{:href => "#", "data-action" => "pause", "data-clear" => "true", "data-toggle" => "true"}
     %i.icon-pause
-  %a.mpd_control{"data-action" => "stop", "data-clear" => "true", "data-toggle" => "true"}
+  %a.mpd_control{:href => "#", "data-action" => "stop", "data-clear" => "true", "data-toggle" => "true"}
     %i.icon-stop
-  %a.mpd_control{"data-action" => "next"}
+  %a.mpd_control{:href => "#", "data-action" => "next"}
     %i.icon-forward
-  %a.mpd_volume{'data-volume' => '-'}
+  %a.mpd_volume{:href => "#", 'data-volume' => '-'}
     %i.icon-volume-down
-  %a.mpd_volume{'data-volume' => '+'}
+  %a.mpd_volume{:href => "#", 'data-volume' => '+'}
     %i.icon-volume-up
-
-
-  %a.mpd_update
+  %a.mpd_update{:href => "#"}
     %i.icon-repeat
 
 #mpd-playlist
@@ -30,9 +28,6 @@
   %h1 {{= data['title'] }}
   %h2 {{= data['artist'] }}
   %h3 {{= data['album'] }}
-  / .span3#progress-bar
-  /   .progress.progress-striped.active
-  /     .bar{:style => "width: {{= data['song_elapsed'] }};"}
 
 %script#tmpl-mpd-playlist{:type => "html/template"}
   {{ _.each(data, function(song, index){ }}

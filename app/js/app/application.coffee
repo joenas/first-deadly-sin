@@ -52,8 +52,7 @@ $ ->
   client = new Faye.Client 'http://' + location.hostname + ':9292/faye'
 
   subscription = client.subscribe '/first-sin/mpd', (msg) ->
-    #fayeStatusMsg(msg.text)
-    fayeActionHandler(msg.action) if msg.action?
+    mpdInfo msg['info']
 
   subscription.callback ->
     fayeStatus(true)
@@ -66,10 +65,6 @@ $ ->
 
   client.bind 'transport:up', ->
     fayeStatus(true)
-
-  fayeActionHandler = (action) ->
-    switch action
-      when 'mpd'      then mpdInfo()
 
   fayeStatus = (connected) ->
     if connected
@@ -103,10 +98,6 @@ $ ->
   $(document).on "click", 'i.close', () ->
     $('div.alert').hide()
 
-  # Menu: MPD
-  $(document).on "click", 'a[data-menu=mpd]', () ->
-    mpdInfo()
-
   ###
   MPD page
   ###
@@ -122,7 +113,7 @@ $ ->
 
   # Update button
   $(document).on "click", 'a.mpd_update', (e) ->
-    mpdInfo()
+    updateMpdInfo()
 
   # Volume button
   $(document).on "click", 'a.mpd_volume', (e) ->
@@ -134,21 +125,19 @@ $ ->
       $(@).removeClass(klass)
     return true
 
-  mpdInfo = () ->
-    $.get '/mpd.json', (data) ->
-      $('a[data-action=random]').addClass('active') if (data['random'])
+  updateMpdInfo = () ->
+    $.get('/mpd.json', (data) ->
+      mpdInfo data
+    )
 
-      $('a[data-action=repeat]').addClass('active') if (data['repeat'])
-
-      activeButton(data['state'])
-      updatePlayer(data)
-      return true
-
+  mpdInfo = (data) ->
+    activeButton(data['state'])
+    updatePlayer(data)
+    return true
 
   mpdDo = (action) ->
     $.get '/mpd.json', {action: action}, (data) ->
       updatePlayer(data)
-
 
   updatePlayer = (data) ->
     unless data['error']?
@@ -165,22 +154,17 @@ $ ->
     clearClass('a[data-clear=true]', 'active')
     $('a[data-action='+action+']').addClass('active')
 
-  toggleButton = (action, state) ->
-    if (state)
-      $('a.mpd_'+action).addClass('active')
-    else
-      $('a.mpd_'+action).removeClass('active')
-
-  setInterval( () ->
-    mpdInfo()
-  ,30000)
-
+  # toggleButton = (action, state) ->
+  #   if (state)
+  #     $('a.mpd_'+action).addClass('active')
+  #   else
+  #     $('a.mpd_'+action).removeClass('active')
 
   ###
   On load
   ###
 
-  mpdInfo()
+  updateMpdInfo()
 
   # $.get '/playlist.json', (data) ->
   #     $.cl data
