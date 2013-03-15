@@ -1,4 +1,4 @@
-# the First Deadly Sin
+# the First Deadly Sin[*](http://www.imdb.com/title/tt0080738/)
 This is a Sinatra web client for a remote or local MPD, with Faye for syncing between clients.  
 Layout and image fetching is a shameless rip-off of [So-nice](https://github.com/sunny/so-nice).  
 
