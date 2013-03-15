@@ -20,6 +20,10 @@ class FirstSin < Sinatra::Base
     $mpd.connect
   end
 
+  before "/*" do
+    $mpd.connect unless $mpd.connected?
+  end
+
   # assets
   register Sinatra::AssetPack
 
