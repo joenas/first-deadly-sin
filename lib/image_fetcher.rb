@@ -21,8 +21,8 @@ class ImageFetcher
   end
 
   def fetch
-    fetch_new_images unless @redis.scard(@key) > 0
-    if image = @image || @redis.srandmember(@key)
+    return DEFAULT_IMAGE unless @artist
+    if image = @redis.srandmember(@key) || fetch_new_images
       return "#{@artist}/#{image}"
     else
       return DEFAULT_IMAGE
@@ -42,9 +42,10 @@ private
     response = JSON.parse(open(AS_URI % @artist_encoded).read)
     images = response['images']['image']
     if images
-      urls = images.map { |image| image['sizes']['size'].first['#text'] } 
-      @image = fetch_and_persist(urls.pop)
+      urls = images.map { |image| image['sizes']['size'].first['#text'] }
+      image = fetch_and_persist(urls.pop)
       fetch_async(urls)
+      image
     end
   end
 

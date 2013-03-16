@@ -2,12 +2,11 @@ class FirstSin < Sinatra::Base
   get '/mpd.json' do
     content_type :json
     if command = params[:action]
-      $mpd.do command
-      broadcast('/first-sin/mpd', { text: "MPD #{command}", action: "mpd" } )
+      $mpd.send command
     elsif vol_change = params[:vol]
-      $mpd.vol params[:vol]
+      mpd_volume vol_change
     end
-    $mpd.info.to_json
+    mpd_info.to_json
   end
 
   get '/image.json' do

@@ -1,0 +1,39 @@
+#!/usr/bin/env ruby
+$:.unshift File.join(File.dirname(__FILE__), '../lib')
+require 'ruby-mpd'
+require 'eventmachine'
+require 'faye'
+require 'mpd_info'
+include MPDInfo
+
+$stdout.sync = true
+
+FAYE_SERVER_URL = ENV['FAYE_SERVER_URL'] || 'http://localhost:9292/faye'
+
+# Allow Faye to start up
+sleep 5
+
+EM.run {
+  $client = Faye::Client.new(FAYE_SERVER_URL)
+  $mpd = MPD.new '10.0.0.12', 6600
+
+  $mpd.on :song do |song|
+    puts "Broadcast >> Song change: #{song.artist} - #{song.title}"
+    $client.publish('/first-sin/mpd', { info: mpd_info, action: "mpd" } )
+  end
+
+  $mpd.on :state do |state|
+    puts "Broadcast >> State change: #{state}"
+    $client.publish('/first-sin/mpd', { info: mpd_info, action: "mpd" } )
+  end
+
+  $mpd.connect true
+}
+
+trap('INT') do
+  puts "exiting"
+  exit 0
+end
+
+sleep 0.5 while true
+

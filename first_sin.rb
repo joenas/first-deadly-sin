@@ -8,12 +8,11 @@ class FirstSin < Sinatra::Base
   set :root, File.dirname(__FILE__)
   set :views, Proc.new { File.join(root, "app/views") }
   set :images, Proc.new { File.join(root, "app/images/artists") }
-  set :_mpd_host, 'localhost'
-  set :_mpd_port, 6600
+  set :mpd_host, '10.0.0.12'
+  set :mpd_port, 6600
   enable :logging
 
-  FAYE_SERVER_URL = 'http://localhost:9292/faye'
-  include FayeBroadcast
+  include MPDInfo
 
   configure :development do
     register Sinatra::Reloader
@@ -22,12 +21,13 @@ class FirstSin < Sinatra::Base
 
   configure do
     $redis = Redis.new
-    $mpd = MPC.instance.setup(_mpd_host, _mpd_port)
+    $mpd = MPD.new mpd_host, mpd_port
+    $mpd.connect
   end
 
-  before '/mpd*' do
-    status = $mpd.connect
-    logger.info "######## MPD ########: #{status}"
+
+  before "/*" do
+    $mpd.connect unless $mpd.connected?
   end
 
   # assets

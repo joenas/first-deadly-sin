@@ -6,7 +6,7 @@ gem 'sinatra-reloader'
 #servers
 gem 'thin'
 gem 'faye'
-gem 'mpd'
+gem 'ruby-mpd'
 gem 'redis'
 gem 'sidekiq'
 

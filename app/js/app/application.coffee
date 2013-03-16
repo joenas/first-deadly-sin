@@ -28,8 +28,7 @@ $ ->
   client = new Faye.Client 'http://' + location.hostname + ':9292/faye'
 
   subscription = client.subscribe '/first-sin/mpd', (msg) ->
-    #fayeStatusMsg(msg.text)
-    fayeActionHandler(msg.action) if msg.action?
+    mpdInfo msg['info']
 
   subscription.callback ->
     fayeStatus(true)
@@ -42,10 +41,6 @@ $ ->
 
   client.bind 'transport:up', ->
     fayeStatus(true)
-
-  fayeActionHandler = (action) ->
-    switch action
-      when 'mpd'      then mpdInfo()
 
   fayeStatus = (connected) ->
     if connected
@@ -124,8 +119,7 @@ $ ->
 
   # Update button
   $(document).on "click", 'a.mpd_update', (e) ->
-    mpdInfo()
-    e.preventDefault()
+    updateMpdInfo()
 
   # Volume button
   $(document).on "click", 'a.mpd_volume', (e) ->
@@ -142,13 +136,14 @@ $ ->
       $(@).removeClass(klass)
     return true
 
-  mpdInfo = () ->
+  updateMpdInfo = () ->
     $.get '/mpd.json', (data) ->
-      $('a[data-action=random]').addClass('active') if (data['random'])
-      $('a[data-action=repeat]').addClass('active') if (data['repeat'])
-      activeButton(data['state'])
-      updatePlayer(data)
-      return true
+      mpdInfo data
+
+  mpdInfo = (data) ->
+    activeButton(data['state'])
+    updatePlayer(data)
+    return true
 
   mpdDo = (action) ->
     $.get '/mpd.json', {action: action}, (data) ->
@@ -184,7 +179,7 @@ $ ->
   On load
   ###
 
-  mpdInfo()
+  updateMpdInfo()
 
   $.get '/playlist.json', (data) ->
     template = _.template(tmpl['mpd-playlist'], {data: data})
