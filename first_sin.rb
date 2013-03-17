@@ -1,5 +1,3 @@
-$stdout.sync = true
-
 class FirstSin < Sinatra::Base
   include MPDInfo
 
