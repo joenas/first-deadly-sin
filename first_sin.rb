@@ -1,12 +1,8 @@
-$stdout.sync = true
-
 class FirstSin < Sinatra::Base
-  include MPDInfo
-
   # Setup
   set :root, File.dirname(__FILE__)
   set :views, Proc.new { File.join(root, "app/views") }
-  set :_mpd_host, '10.0.0.12'
+  set :_mpd_host, 'localhost'
   set :_mpd_port, 6600
   enable :logging
 
@@ -17,7 +13,6 @@ class FirstSin < Sinatra::Base
 
   configure do
     $mpd = MPD.new _mpd_host, _mpd_port
-    $mpd.connect
   end
 
   before "/*" do

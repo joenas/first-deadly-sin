@@ -1,3 +1,4 @@
-app: rackup first_sin.ru -p $PORT
+#app: rackup first_sin.ru -p $PORT
+app: thin start -p $PORT
 faye: rackup faye.ru -E production
-listener: bin/mpd_listener
+#publisher: bin/mpd_publisher

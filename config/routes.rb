@@ -4,9 +4,9 @@ class FirstSin < Sinatra::Base
     if command = params[:action]
       $mpd.send command
     elsif vol_change = params[:vol]
-      mpd_volume vol_change
+      $mpd.send(vol_change, 5)
     end
-    mpd_info.to_json
+    $mpd.info.to_json
   end
 
   get '/playlist.json' do
