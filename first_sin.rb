@@ -2,8 +2,8 @@ class FirstSin < Sinatra::Base
   # Setup
   set :root, File.dirname(__FILE__)
   set :views, Proc.new { File.join(root, "app/views") }
-  set :_mpd_host, 'localhost'
-  set :_mpd_port, 6600
+  set :mpd_host, ENV['MPD_HOST'] || 'localhost'
+  set :mpd_port, ENV['MPD_PORT'] || 6600
   enable :logging
 
   configure :development do
@@ -12,7 +12,7 @@ class FirstSin < Sinatra::Base
   end
 
   configure do
-    $mpd = MPD.new _mpd_host, _mpd_port
+    $mpd = MPD.new mpd_host, mpd_port
   end
 
   before "/*" do

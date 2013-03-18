@@ -9,18 +9,22 @@ $stdout.sync = true
 
 FAYE_SERVER_URL = ENV['FAYE_SERVER_URL'] || 'http://localhost:9292/faye'
 
+# MPD
 MPD_HOST = ENV['MPD_HOST'] || 'localhost'
 MPD_PORT = ENV['MPD_PORT'] || 6600
 MPD_CONNECTION_TIMEOUT = "MPD connection timeout, is MPD running?"
 MPD_CONNECTION_REFUSED = "MPD connection refused, is MPD running?"
 
+$mpd = MPD.new MPD_HOST, MPD_PORT
+
 Thread.new do
   EM.next_tick do
 
+    # Logging
     $logger = Logger.new STDOUT
     $logger.level = Logger::INFO
     $logger.formatter = proc do |severity, datetime, progname, msg|
-      "#{datetime}: [#{severity}] #{msg}\n"
+      "#{MPD_HOST} - - [#{datetime.strftime("%d/%b/%Y %H:%M:%S")}] [#{severity}] #{msg}\n"
     end
 
     trap('INT') do
@@ -28,8 +32,6 @@ Thread.new do
       $mpd.disconnect if $mpd.connected?
       exit 0
     end
-
-    $mpd = MPD.new MPD_HOST, MPD_PORT
 
     $mpd.on :song do |song|
       $logger.info "MPD - #{song.artist} - #{song.title}"
@@ -43,22 +45,23 @@ Thread.new do
 
     begin
       $mpd.connect true
-      $logger.info "MPD: connected, version #{$mpd.version}"
+      $logger.info "MPD - connected, version #{$mpd.version}"
     rescue Errno::ETIMEDOUT => error
       abort MPD_CONNECTION_TIMEOUT
     rescue Errno::ECONNREFUSED => error
       abort MPD_CONNECTION_REFUSED
     end
 
+
+    # Faye
     $faye = Faye::Client.new(FAYE_SERVER_URL)
-    $faye.connect
 
     $faye.bind('transport:up') do
-      $logger.info "Faye: connected"
+      $logger.info "Faye - connected"
     end
 
     $faye.bind('transport:down') do
-      $logger.error "Faye: disconnected"
+      $logger.error "Faye - disconnected"
     end
   end
 end
