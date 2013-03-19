@@ -10,8 +10,10 @@ For old behaviour, checkout branch [pull](https://github.com/joenas/first-deadly
 For a version that uses Redis and a stores the artists images locally, checkout branch [local_store](https://github.com/joenas/first-deadly-sin/tree/local_store).
 
 # Usage
-```
-$ foreman start (-p port)   # default is 3000
+```bash
+$ foreman start (-p port) # default is 3000
+# or if you already have Faye running (on port 9292)
+$ thin start (-p port)
 ```
 
 
