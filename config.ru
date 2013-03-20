@@ -46,7 +46,6 @@ Thread.new do
       abort MPD_CONNECTION_REFUSED
     end
 
-
     # Faye
     $faye = Faye::Client.new(FAYE_SERVER_URL)
 
@@ -65,6 +64,5 @@ trap('INT') do
   $mpd.disconnect if $mpd.connected?
   exit 0
 end
-
 
 run FirstSin
