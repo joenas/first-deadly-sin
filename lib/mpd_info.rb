@@ -3,15 +3,17 @@ class MPD
     module Information
       def info
         song = current_song
-        status.merge(
+        if song
+          status.merge(
           {
             :artist => song.artist,
             :album => song.album,
             :title => song.title,
             :file => song.file
-          }
-        ) if song
-        status
+          })
+        else
+          status
+        end
       end
     end
 
