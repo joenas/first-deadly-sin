@@ -3,11 +3,12 @@ class FirstSin < Sinatra::Base
   set :root, File.dirname(__FILE__)
   set :views, Proc.new { File.join(root, "app/views") }
   enable :logging
+  #set :environment, :production
 
-  # configure :development do
-  #   register Sinatra::Reloader
-  #   also_reload './config/routes'
-  # end
+  configure :development do
+    register Sinatra::Reloader
+    also_reload './config/routes'
+  end
 
   before '/*' do
     $mpd.connect unless $mpd.connected?

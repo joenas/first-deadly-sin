@@ -1,4 +1,7 @@
 class FirstSin < Sinatra::Base
+  not_found { haml :'404' }
+  error { @error = request.env['sinatra.error'] ; haml :'500' }
+
   get '/mpd.json' do
     content_type :json
     if command = params[:action]
@@ -11,7 +14,6 @@ class FirstSin < Sinatra::Base
 
   get '/playlist.json' do
     content_type :json
-
     $mpd.playlist.map do |file|
       {
         :artist => file.artist,
@@ -22,7 +24,7 @@ class FirstSin < Sinatra::Base
     end.to_json if $mpd.active?
   end
 
-  get '/*' do
+  get '/' do
     haml :index
   end
 end
