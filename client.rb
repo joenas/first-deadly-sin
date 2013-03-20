@@ -1,3 +1,5 @@
+# Just for testing Faye and see that the apps sends its messages
+
 require 'faye'
 require 'eventmachine'
 FAYE_SERVER_URL = ENV['FAYE_SERVER_URL'] || 'http://localhost:9292/faye'

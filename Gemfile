@@ -3,6 +3,9 @@ source 'https://rubygems.org'
 gem "sinatra", :require => "sinatra/base"
 gem 'sinatra-reloader'
 
+gem 'celluloid'
+gem 'celluloid-io'
+
 #servers
 gem 'thin'
 gem 'faye'

@@ -4,9 +4,13 @@ class FirstSin < Sinatra::Base
   set :views, Proc.new { File.join(root, "app/views") }
   enable :logging
 
-  configure :development do
-    register Sinatra::Reloader
-    also_reload './config/routes'
+  # configure :development do
+  #   register Sinatra::Reloader
+  #   also_reload './config/routes'
+  # end
+
+  before '/*' do
+    $mpd.connect unless $mpd.connected?
   end
 
   # assets
