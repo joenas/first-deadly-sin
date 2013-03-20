@@ -37,7 +37,7 @@ listener = Celluloid::Actor[:listener]
 
 listener.on :song do
   song = $mpd.current_song
-  $logger.info "MPD - #{song.artist} - #{song.title}"
+  $logger.info "MPD - #{song.artist} - #{song.title}" if song
   publisher.async.publish('/first-sin/mpd', { info: $mpd.info, action: "mpd" } )
 end
 

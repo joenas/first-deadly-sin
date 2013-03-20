@@ -10,7 +10,8 @@ class MPD
             :title => song.title,
             :file => song.file
           }
-        )
+        ) if song
+        status
       end
     end
 

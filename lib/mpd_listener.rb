@@ -4,15 +4,13 @@ class MPDListener
   def initialize(mpd)
     @mpd = mpd
     @callbacks = {}
+    connect unless @mpd.connected?
+    async.run
   end
 
   def run
-    begin
-      @old_status = {}
-      loop{listen}
-    rescue Errno::ECONNRESET => error
-      $logger.error("MPD - #{error.message}")
-    end
+    @old_status = {}
+    loop{listen}
   end
 
   def listen
@@ -38,5 +36,28 @@ class MPDListener
   def on(event, &block)
     @callbacks[event] ||= []
     @callbacks[event].push block
+  end
+
+  def disengage!
+    $logger.error('MPD - Cannot reconnect, aborting')
+    exit 1
+    # For some reason...
+    terminate
+    # =>
+    # E, [2013-03-20T19:37:11.560795 #1152] ERROR -- : Supervisor crashed!
+    # RuntimeError: a group member went missing. This shouldn't be!
+  end
+
+  def connect
+    after(30) do
+      disengage! unless @mpd.connected?
+    end
+    begin
+      $logger.info('MPD - Trying to connect')
+      @mpd.connect
+    rescue Errno::ECONNREFUSED => error
+      sleep 1
+      retry
+    end
   end
 end
