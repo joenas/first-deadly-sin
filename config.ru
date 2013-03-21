@@ -5,18 +5,19 @@ Bundler.require
 Dir[File.dirname(__FILE__) + '/lib/*'].each {|file| require file }
 require './first_sin'
 
+FAYE_SERVER_URL = ENV['FAYE_SERVER_URL'] || 'http://localhost:9292/faye'
+MPD_HOST = ENV['MPD_HOST'] || '10.0.0.12'
+MPD_PORT = ENV['MPD_PORT'] || 6600
+MPD_CONNECTION_TIMEOUT = "MPD connection timeout, is MPD running?"
+MPD_CONNECTION_REFUSED = "MPD connection refused, is MPD running?"
+
+
 $stderr.sync = $stdout.sync = true
 $logger = Logger.new STDOUT
 $logger.level = Logger::INFO
 $logger.formatter = proc do |severity, datetime, progname, msg|
   "#{MPD_HOST} - - [#{datetime.strftime("%d/%b/%Y %H:%M:%S")}] [#{severity}] #{msg}\n"
 end
-
-FAYE_SERVER_URL = ENV['FAYE_SERVER_URL'] || 'http://localhost:9292/faye'
-MPD_HOST = ENV['MPD_HOST'] || '10.0.0.12'
-MPD_PORT = ENV['MPD_PORT'] || 6600
-MPD_CONNECTION_TIMEOUT = "MPD connection timeout, is MPD running?"
-MPD_CONNECTION_REFUSED = "MPD connection refused, is MPD running?"
 
 begin
   $mpd = MPD.new MPD_HOST, MPD_PORT
@@ -28,9 +29,8 @@ rescue Errno::ECONNREFUSED => error
   $logger.error MPD_CONNECTION_REFUSED and exit 1
 end
 
-Supervisor.supervise Publisher, :as => :publisher, :args => [FAYE_SERVER_URL]
-Supervisor.supervise MPDListener, :as => :listener,  :args => [$mpd, :publisher, [:song, :state]]
-supervisor = Supervisor.run!
+Publisher.supervise_as :publisher, FAYE_SERVER_URL
+MPDListener.supervise_as :listener,  $mpd, Celluloid::Actor[:publisher], [:song, :state]
 
 Celluloid::Actor[:publisher].on :song do |publisher|
   info = $mpd.info

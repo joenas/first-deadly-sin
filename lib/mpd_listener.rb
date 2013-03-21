@@ -4,7 +4,7 @@ class MPDListener
   def initialize(mpd, publisher, monitored_events = [])
     @mpd = mpd
     @monitored_events = monitored_events
-    @publisher = Celluloid::Actor[publisher]
+    @publisher = publisher
     connect unless @mpd.connected?
     async.run
   end
