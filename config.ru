@@ -28,25 +28,21 @@ rescue Errno::ECONNREFUSED => error
   $logger.error MPD_CONNECTION_REFUSED and exit 1
 end
 
-Supervisor.supervise MPDListener, :as => :listener,  :args => [$mpd]
 Supervisor.supervise Publisher, :as => :publisher, :args => [FAYE_SERVER_URL]
+Supervisor.supervise MPDListener, :as => :listener,  :args => [$mpd, :publisher, [:song, :state]]
 supervisor = Supervisor.run!
 
-publisher = Celluloid::Actor[:publisher]
-listener = Celluloid::Actor[:listener]
-
-listener.on :song do
-  song = $mpd.current_song
-  $logger.info "MPD - #{song.artist} - #{song.title}" if song
-  publisher.async.publish('/first-sin/mpd', { info: $mpd.info, action: "mpd" } )
+Celluloid::Actor[:publisher].on :song do |publisher|
+  info = $mpd.info
+  $logger.info "MPD - [Song] #{info[:artist]} - #{info[:title]}"
+  publisher.async.publish('/first-sin/mpd', { info: info, action: "mpd" } )
 end
 
-listener.on :state do |state|
-  $logger.info "MPD - #{state}"
-  publisher.async.publish('/first-sin/mpd', { info: $mpd.info, action: "mpd" } )
+Celluloid::Actor[:publisher].on :state do |publisher|
+  info = $mpd.info
+  $logger.info "MPD - [State] #{info[:state]}"
+  publisher.async.publish('/first-sin/mpd', { info: info, action: "mpd" } )
 end
-
-listener.async.run
 
 trap('INT') do
   supervisor.finalize

@@ -1,9 +1,10 @@
 class MPDListener
   include Celluloid
 
-  def initialize(mpd)
+  def initialize(mpd, publisher, monitored_events = [])
     @mpd = mpd
-    @callbacks = {}
+    @monitored_events = monitored_events
+    @publisher = Celluloid::Actor[publisher]
     connect unless @mpd.connected?
     async.run
   end
@@ -13,39 +14,22 @@ class MPDListener
     loop{listen}
   end
 
+private
   def listen
     status = @mpd.status
-    changed_keys = Hash[(status.to_a - @old_status.to_a)]
-    trigger_callbacks(changed_keys)
+    new_events = (status.to_a - @old_status.to_a).map(&:first)
+    emit_changes(new_events)
     @old_status = status
     sleep 0.1
   end
 
-  def trigger_callbacks(events)
-    events.each do |event, value|
-      perform(event, value) if @callbacks[event]
-    end
-  end
-
-  def perform(event, value)
-    @callbacks[event].each do |callback|
-      callback.call(value)
-    end
-  end
-
-  def on(event, &block)
-    @callbacks[event] ||= []
-    @callbacks[event].push block
+  def emit_changes(events)
+    @publisher.mailbox << events & @monitored_events
   end
 
   def disengage!
     $logger.error('MPD - Cannot reconnect, aborting')
-    exit 1
-    # For some reason...
-    terminate
-    # =>
-    # E, [2013-03-20T19:37:11.560795 #1152] ERROR -- : Supervisor crashed!
-    # RuntimeError: a group member went missing. This shouldn't be!
+    Celluloid.shutdown and exit 1
   end
 
   def connect
@@ -55,8 +39,9 @@ class MPDListener
     begin
       $logger.info('MPD - Trying to connect')
       @mpd.connect
+      $logger.info('MPD - Connected!')
     rescue Errno::ECONNREFUSED => error
-      sleep 1
+      sleep 2
       retry
     end
   end
