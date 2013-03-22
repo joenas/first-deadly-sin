@@ -6,7 +6,6 @@ In Ubuntu, this integrates nicely with [Fogger](https://apps.ubuntu.com/cat/appl
 On Mac OS X you can try [Fluid](http://fluidapp.com/).
 
 Thanks to the awesome callbacks of [ruby-mpd](https://github.com/archSeer/ruby-mpd) this app now uses a MPD listener to push changes to all clients.  
-For old behaviour, checkout branch [pull](https://github.com/joenas/first-deadly-sin/tree/pull).  
 For a version that uses Redis and a stores the artists images locally, checkout branch [local_store](https://github.com/joenas/first-deadly-sin/tree/local_store).
 
 # Usage

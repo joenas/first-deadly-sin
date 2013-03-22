@@ -21,7 +21,7 @@ class Publisher
       uri = URI.parse( @url )
       Net::HTTP.post_form(uri, :message => message.to_json)
     rescue Errno::ECONNREFUSED => error
-      $logger.error("Faye - Connection refused at #{uri}")
+      FirstSin.logger.error("Faye - Connection refused at #{uri}")
     end
   end
 

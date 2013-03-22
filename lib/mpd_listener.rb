@@ -10,19 +10,20 @@ class MPDListener
 
   def run
     connect unless @mpd.connected?
-    listen({})
+    @old_status = {}
+    loop{listen}
   end
 
 private
-  def listen(old_status)
-    listen @mpd.status.tap{ |stat|
-      emit_events (stat.to_a - old_status.to_a).map(&:first)
-      sleep 0.2
-    }
+  def listen
+    status = @mpd.status
+    emit_events status.diff(@old_status).keys
+    @old_status = status
+    sleep 0.2
   end
 
   def emit_events(events)
-    @publisher.mailbox << events & @monitored_events
+    @publisher.mailbox << (events & @monitored_events)
   end
 
   def disengage!

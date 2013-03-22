@@ -3,44 +3,29 @@ require 'rubygems'
 require 'bundler'
 Bundler.require
 Dir[File.dirname(__FILE__) + '/lib/*'].each {|file| require file }
-require './first_sin'
-
-FAYE_SERVER_URL = ENV['FAYE_SERVER_URL'] || 'http://localhost:9292/faye'
-MPD_HOST = ENV['MPD_HOST'] || '10.0.0.12'
-MPD_PORT = ENV['MPD_PORT'] || 6600
-MPD_CONNECTION_TIMEOUT = "MPD connection timeout, is MPD running?"
-MPD_CONNECTION_REFUSED = "MPD connection refused, is MPD running?"
 
 $stderr.sync = $stdout.sync = true
-$logger = Logger.new STDOUT
-$logger.level = Logger::INFO
-$logger.formatter = proc do |severity, datetime, progname, msg|
-  "#{MPD_HOST} - - [#{datetime.strftime("%d/%b/%Y %H:%M:%S")}] [#{severity}] #{msg}\n"
-end
 
-begin
-  $mpd = MPD.new MPD_HOST, MPD_PORT
-  $mpd.connect
-  $logger.info('MPD - Connected')
-rescue Errno::ETIMEDOUT => error
-  $logger.error MPD_CONNECTION_TIMEOUT and exit 1
-rescue Errno::ECONNREFUSED => error
-  $logger.error MPD_CONNECTION_REFUSED and exit 1
-end
+FirstSin.configure do |config|
+  config.faye_server_url = 'http://localhost:9292/faye'
+  #config.mpd_host = 'localhost'
+  #config.mpd_port = 6600
+  config.mpd_events = [:state, :song]
+  config.logger.formatter = proc do |severity, datetime, progname, msg|
+     "#{config[:mpd_host]} - - [#{datetime.strftime("%d/%b/%Y %H:%M:%S")}] [#{severity}] #{msg}\n"
+  end
 
-Publisher.supervise_as :publisher, FAYE_SERVER_URL
-MPDListener.supervise_as :listener,  $mpd, Celluloid::Actor[:publisher], [:song, :state]
+  config.publisher :on => :song do |publisher|
+    info = $mpd.info
+    FirstSin.logger.info "MPD - [Song] #{info[:artist]} - #{info[:title]}"
+    publisher.async.publish('/first-sin/mpd', { info: info, action: "mpd" } )
+  end
 
-Celluloid::Actor[:publisher].on :song do |publisher|
-  info = $mpd.info
-  $logger.info "MPD - [Song] #{info[:artist]} - #{info[:title]}"
-  publisher.async.publish('/first-sin/mpd', { info: info, action: "mpd" } )
-end
-
-Celluloid::Actor[:publisher].on :state do |publisher|
-  info = $mpd.info
-  $logger.info "MPD - [State] #{info[:state]}"
-  publisher.async.publish('/first-sin/mpd', { info: info, action: "mpd" } )
+  config.publisher :on => :state do |publisher|
+    info = $mpd.info
+    FirstSin.logger.info "MPD - [State] #{info[:state]}"
+    publisher.async.publish('/first-sin/mpd', { info: info, action: "mpd" } )
+  end
 end
 
 trap('INT') do
@@ -49,4 +34,5 @@ trap('INT') do
   exit 0
 end
 
-run FirstSin
+FirstSin.run
+run FirstSin::WebApp
