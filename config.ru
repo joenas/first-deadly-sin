@@ -11,7 +11,6 @@ MPD_PORT = ENV['MPD_PORT'] || 6600
 MPD_CONNECTION_TIMEOUT = "MPD connection timeout, is MPD running?"
 MPD_CONNECTION_REFUSED = "MPD connection refused, is MPD running?"
 
-
 $stderr.sync = $stdout.sync = true
 $logger = Logger.new STDOUT
 $logger.level = Logger::INFO
@@ -45,7 +44,7 @@ Celluloid::Actor[:publisher].on :state do |publisher|
 end
 
 trap('INT') do
-  supervisor.finalize
+  Celluloid.shutdown
   puts ">> Stopping ..."
   exit 0
 end
