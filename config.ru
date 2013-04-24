@@ -34,5 +34,10 @@ trap('INT') do
   exit 0
 end
 
-FirstSin.run
-run FirstSin::WebApp
+begin
+  FirstSin.run
+  run FirstSin::WebApp
+rescue Exception => error
+  FirstSin.logger.error "ERROR: #{error.message}"
+  FirstSin.shutdown
+end

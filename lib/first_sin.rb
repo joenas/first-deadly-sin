@@ -1,7 +1,5 @@
 module FirstSin
   class << self
-    MPD_ERROR = "MPD connection failed: "
-
     def configure
       yield config if block_given?
     end
@@ -20,15 +18,20 @@ module FirstSin
       config[:logger]
     end
 
+    def shutdown
+      # Ugly hack to shutdown Faye
+      %x[lsof -i :9292 -t].split("\n").each { |pid|
+        %x[kill -9 #{pid}] if %x[cat /proc/#{pid}/cmdline] =~ /rackup/
+      }
+      Celluloid.shutdown
+      exit 1
+    end
+
   private
     def connect_mpd
-      begin
-        $mpd = MPD.new *config[:mpd_conf]
-        $mpd.connect
-        logger.info('MPD - Connected')
-      rescue => error
-        logger.error "#{MPD_ERROR} #{error.message}" and exit 1
-      end
+      $mpd = MPD.new *config[:mpd_conf]
+      $mpd.connect
+      logger.info('MPD - Connected')
     end
 
     def run_actors

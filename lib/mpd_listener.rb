@@ -27,7 +27,7 @@ private
   end
 
   def disengage!
-    $logger.error('MPD - Cannot reconnect, aborting')
+    FirstSin.logger.error('MPD - Cannot reconnect, aborting')
     Celluloid.shutdown and exit 1
   end
 
@@ -35,9 +35,9 @@ private
     after(30) do
       disengage! unless @mpd.connected?
     end
-    $logger.info('MPD - Trying to connect')
+    FirstSin.logger.info('MPD - Trying to connect')
     @mpd.connect
-    $logger.info('MPD - Connected!')
+    FirstSin.logger.info('MPD - Connected!')
   rescue Errno::ECONNREFUSED => error
     sleep 2
     retry
