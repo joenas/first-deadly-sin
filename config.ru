@@ -8,8 +8,8 @@ $stderr.sync = $stdout.sync = true
 
 FirstSin.configure do |config|
   config.faye_server_url = 'http://localhost:9292/faye'
-  #config.mpd_host = 'localhost'
-  #config.mpd_port = 6600
+  config.mpd_host = '10.0.0.12'
+  config.mpd_port = 6600
   config.mpd_events = [:state, :song]
   config.logger.formatter = proc do |severity, datetime, progname, msg|
      "#{config[:mpd_host]} - - [#{datetime.strftime("%d/%b/%Y %H:%M:%S")}] [#{severity}] #{msg}\n"
@@ -29,15 +29,8 @@ FirstSin.configure do |config|
 end
 
 trap('INT') do
-  Celluloid.shutdown
-  puts ">> Stopping ..."
-  exit 0
+  FirstSin.shutdown(true)
 end
 
-begin
-  FirstSin.run
-  run FirstSin::WebApp
-rescue Exception => error
-  FirstSin.logger.error "ERROR: #{error.message}"
-  FirstSin.shutdown
-end
+FirstSin.run
+run FirstSin::WebApp

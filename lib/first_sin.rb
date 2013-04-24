@@ -1,4 +1,6 @@
 module FirstSin
+  class ShutdownError < StandardError; end
+
   class << self
     def configure
       yield config if block_given?
@@ -12,24 +14,25 @@ module FirstSin
       connect_mpd
       run_actors
       setup_callbacks
+    rescue FirstSin::ShutdownError => error
+      logger.error "#{error.message}: #{caller.first}"
+      shutdown
     end
 
     def logger
       config[:logger]
     end
 
-    def shutdown
-      # Ugly hack to shutdown Faye
-      %x[lsof -i :9292 -t].split("\n").each { |pid|
-        %x[kill -9 #{pid}] if %x[cat /proc/#{pid}/cmdline] =~ /rackup/
-      }
+    def shutdown(success = false)
+      logger.info ">> Shutting down"
+      #shutdown_faye
       Celluloid.shutdown
-      exit 1
+      exit success
     end
 
   private
     def connect_mpd
-      $mpd = MPD.new *config[:mpd_conf]
+      $mpd = MPD.new(config[:mpd_host], config[:mpd_port])
       $mpd.connect
       logger.info('MPD - Connected')
     end
@@ -42,6 +45,13 @@ module FirstSin
     def setup_callbacks
       config[:callbacks].each do |event, block|
         Celluloid::Actor[:publisher].on(event, &block)
+      end
+    end
+
+    def shutdown_faye
+      # Ugly hack to shutdown Faye
+      %x[lsof -i :9292 -t].split("\n").each do |pid|
+        %x[kill -9 #{pid}] if %x[cat /proc/#{pid}/cmdline] =~ /rackup/
       end
     end
   end
