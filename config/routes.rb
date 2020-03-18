@@ -12,7 +12,6 @@ class FirstSin < Sinatra::Base
     command = params[:action]
     vol_change = params[:vol]
     if command == 'pause'
-      puts 'paused', $mpd.paused?
       $mpd.send(:pause=, !$mpd.paused?)
     elsif command
       $mpd.send command

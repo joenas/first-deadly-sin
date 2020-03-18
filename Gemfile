@@ -2,8 +2,10 @@
 
 source 'https://rubygems.org'
 
-gem 'sinatra', require: 'sinatra/base'
-gem 'sinatra-reloader'
+gem 'sinatra', '~> 2.0', '>= 2.0.8.1'
+gem 'sinatra-contrib'
+# For contrib
+# gem 'backports', '~> 3.17'
 
 gem 'celluloid', '0.17.4'
 gem 'celluloid-io', '0.17.3'
@@ -16,9 +18,9 @@ gem 'thin'
 
 # assets
 gem 'coffee-script'
-gem 'haml'
+gem 'haml', '~> 4.0.0'
 gem 'sass'
-gem 'sinatra-assetpack', require: 'sinatra/assetpack'
+gem 'sinatra-asset-pipeline', '~> 2.2.0'
 gem 'yui-compressor', require: 'yui/compressor'
 
 gem 'json', '~> 2.3'

@@ -4,9 +4,9 @@
     %title the First Deadly Sin
     %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}/
     %link{:href => "http://fonts.googleapis.com/css?family=Titillium+Web", :rel => "stylesheet", :type => "text/css"}/
-    = css :app
+    = stylesheet_tag 'app'
+
   %body
     .content
       = yield
-    = js :vendor
-    = js :app
+    = javascript_tag 'app'

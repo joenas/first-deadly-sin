@@ -16,32 +16,38 @@ $ ->
   # Get a new artist image from Last.fm via jsonp
   # When found calls the `callback` with the image url as the first argument
   artistImage = (artist, callback) ->
+    if !artist
+      return callback()
+
     cb = ->
       callback cache[artist].random()
+      return
 
     cache = artistImage.cache
     artist = encodeURI(artist)
-
     # Deliver from cache
     if cache.hasOwnProperty(artist)
-
       # execute the callback asynchronously to minimize codepaths
       setTimeout cb, 10
       return
-
     # Load
-    last_fm_uri = "http://ws.audioscrobbler.com/2.0/?format=json&method=artist.getimages&artist=%s&api_key=e37be5627a5ca3106743f138b2220f12"
+    last_fm_uri = 'http://ws.audioscrobbler.com/2.0/?format=json&method=artist.getinfo&artist=%s&api_key=c5f3ecc4cebaf7129c6a39e718debeb1'
     $.ajax
-      url: last_fm_uri.replace("%s", artist)
-      dataType: "jsonp"
+      url: last_fm_uri.replace('%s', artist)
+      dataType: 'jsonp'
       success: (obj) ->
-        if obj.images.image
-          cache[artist] = $.map(obj.images.image, (img) ->
-            img.sizes.size[0]["#text"]
+        console.log(obj)
+        if obj.artist.image
+          cache[artist] = $.map(obj.artist.image, (img) ->
+            if img.size == 'mega'
+              return img['#text']
+            return
           )
           cb()
         else
           callback()
+        return
+    return
 
   artistImage.cache = {}
 
@@ -171,5 +177,3 @@ $ ->
   #     template = _.template(tmpl['mpd-playlist'], {data: data})
   #     $('#mpd-playlist').html(template)
   #     return true
-
-
