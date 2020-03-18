@@ -1,2 +1,2 @@
-app: thin start -p $PORT
+app: bundle exec thin start -p $PORT
 faye: rackup faye.ru -E production
