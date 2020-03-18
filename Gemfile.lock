@@ -59,7 +59,8 @@ GEM
       eventmachine (>= 0.12.0)
       websocket-driver (>= 0.5.1)
     ffi (1.12.2)
-    haml (4.0.7)
+    haml (5.1.2)
+      temple (>= 0.8.0)
       tilt
     hashie (4.1.0)
     http-cookie (1.0.3)
@@ -138,6 +139,7 @@ GEM
       rack (> 1, < 3)
     sprockets-helpers (1.2.1)
       sprockets (>= 2.2)
+    temple (0.8.2)
     therubyracer (0.12.3)
       libv8 (~> 3.16.14.15)
       ref
@@ -164,7 +166,7 @@ DEPENDENCIES
   dotenv (~> 2.7, >= 2.7.5)
   eventmachine (= 1.0.4)
   faye (= 1.2.4)
-  haml (~> 4.0.0)
+  haml (~> 5.1, >= 5.1.2)
   json (~> 2.3)
   rspotify (~> 2.8)
   ruby-mpd

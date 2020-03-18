@@ -18,7 +18,7 @@ gem 'thin'
 
 # assets
 gem 'coffee-script'
-gem 'haml', '~> 4.0.0'
+gem 'haml', '~> 5.1', '>= 5.1.2'
 gem 'sass'
 gem 'sinatra-asset-pipeline', '~> 2.2.0'
 
