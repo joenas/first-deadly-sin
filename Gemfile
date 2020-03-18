@@ -5,10 +5,6 @@ source 'https://rubygems.org'
 gem 'sinatra', '~> 2.0', '>= 2.0.8.1'
 gem 'sinatra-contrib'
 
-gem 'celluloid', '0.17.4'
-gem 'celluloid-io', '0.17.3'
-gem 'eventmachine', '1.0.4'
-
 gem 'dotenv', '~> 2.7', '>= 2.7.5'
 
 # servers
