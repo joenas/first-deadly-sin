@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Just for testing Faye and see that the apps sends its messages
 
 require 'faye'

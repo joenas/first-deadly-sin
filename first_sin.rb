@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class FirstSin < Sinatra::Base
   # Setup
   set :root, File.dirname(__FILE__)
-  set :views, Proc.new { File.join(root, "app/views") }
+  set :views, (proc { File.join(root, 'app/views') })
   enable :logging
-  #set :environment, :production
+  # set :environment, :production
 
   configure :development do
     register Sinatra::Reloader
@@ -17,18 +19,22 @@ class FirstSin < Sinatra::Base
   # assets
   register Sinatra::AssetPack
 
-  assets {
+  assets do
     prebuild true
-    serve '/img', from: 'app/images'    # Optional
-    js_compression  :yui, :munge => true
+    serve '/img', from: 'app/images' # Optional
+    js_compression :yui, munge: true
     js :vendor, [
       '/js/vendor/jquery.js',
       '/js/vendor/underscore.js',
       '/js/vendor/*.js'
     ]
-    js :app, [ '/js/app/*.js' ]
-    css :app, [ '/css/font-awesome.min.css', '/css/application.css', '/css/responsive.css' ]
-  }
+    js :app, ['/js/app/*.js']
+    css :app, [
+      '/css/font-awesome.min.css',
+      '/css/application.css',
+      '/css/responsive.css'
+    ]
+  end
 
   require './config/routes'
 end

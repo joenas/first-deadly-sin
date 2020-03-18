@@ -1,0 +1,7 @@
+# Offense count: 32
+# Configuration parameters: AllowedVariables.
+Style/GlobalVars:
+  Exclude:
+    - "config.ru"
+    - "config/routes.rb"
+    - "first_sin.rb"
