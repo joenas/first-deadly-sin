@@ -29,7 +29,7 @@ $ ->
       setTimeout cb, 10
       return
     # Load
-    $.get '/artist.json', {artist: artist}, (data) ->
+    $.get '/image', {artist: artist}, (data) ->
       if data.url
         cache[artist] = data.url
         cb()
@@ -63,14 +63,7 @@ $ ->
     fayeStatus(true)
 
   fayeStatus = (connected) ->
-    if connected
-      icon = 'icon-ok'
-    else
-      icon = 'icon-remove'
-    fayeStatusIcon icon
-
-  fayeStatusIcon = (icon) ->
-    $('i[data-id=faye-status-icon]').attr('class', icon)
+    console.log("Faye connected: ", connected)
 
   ###
   Templates
@@ -113,7 +106,7 @@ $ ->
 
   # Volume button
   $(document).on "click", 'a.mpd_volume', (e) ->
-    $.get '/mpd.json', {vol: $(this).data('volume')}
+    $.post '/volume', {vol: $(this).data('volume')}
 
   # MPD functions!
   clearClass = (selector, klass) ->
@@ -122,7 +115,7 @@ $ ->
     return true
 
   updateMpdInfo = () ->
-    $.get('/mpd.json', (data) ->
+    $.get('/info', (data) ->
       mpdInfo data
     )
 
@@ -132,15 +125,15 @@ $ ->
     return true
 
   mpdDo = (action) ->
-    $.get '/mpd.json', {action: action}, (data) ->
-      updatePlayer(data)
+    $.post '/command', {action: action}, (data) ->
+      # updatePlayer(data)
+      console.log(data)
 
   updatePlayer = (data) ->
     unless data['error']?
       template = _.template(tmpl['mpd-info'], {data: data})
       $('#mpd-info').html(template)
       artistImage data['artist'], (url) ->
-        console.log(url)
         $("body").background url
     else
       $('.alert').show()

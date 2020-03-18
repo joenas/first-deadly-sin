@@ -10,26 +10,34 @@ class FirstSin < Sinatra::Base
     haml :'500'
   end
 
-  get '/mpd.json' do
+  get '/info' do
     content_type :json
-    command = params[:action]
-    vol_change = params[:vol]
-    if command == 'pause'
-      $mpd.send(:pause=, !$mpd.paused?)
-    elsif command
-      $mpd.send command
-    elsif vol_change
-      $mpd.send(vol_change, 5)
-    end
     $mpd.info.to_json
   end
 
-  get '/playlist.json' do
+  post '/command' do
+    content_type :json
+    command = params[:action]
+    if command == 'pause'
+      res = $mpd.send(:pause=, !$mpd.paused?)
+    elsif command
+      res = $mpd.send command
+    end
+    { success: res }.to_json
+  end
+
+  post '/volume' do
+    content_type :json
+    volume = $mpd.send(params[:vol], 5)
+    { volume: volume }.to_json
+  end
+
+  get '/playlist' do
     content_type :json
     $mpd.playlists.map(&:name).to_json if $mpd.connected?
   end
 
-  get '/artist.json' do
+  get '/image' do
     content_type :json
     artists = RSpotify::Artist.search(CGI.unescape(params[:artist]))
     return if !artists || artists.empty?

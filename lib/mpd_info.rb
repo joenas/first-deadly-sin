@@ -24,13 +24,11 @@ class MPD
 
     module PlaybackOptions
       def volup(change)
-        new_vol = (volume + change)
-        self.volume = new_vol >= 100 ? 100 : new_vol
+        self.volume = [100, (volume + change)].min
       end
 
       def voldown(change)
-        new_vol = (volume - change)
-        self.volume = new_vol <= 0 ? 0 : new_vol
+        self.volume = [0, (volume - change)].max
       end
     end
   end
