@@ -7,8 +7,6 @@ $ ->
   Code from So-nice
   https://github.com/sunny/so-nice/blob/master/public/script.js
   ###
-  Array::random = ->
-    this[Math.floor(Math.random() * @length)]
 
   $.fn.background = (bg) ->
     $(this).css "backgroundImage", (if bg then "url(" + bg + ")" else "none")
@@ -153,20 +151,8 @@ $ ->
     clearClass('a[data-clear=true]', 'active')
     $('a[data-action='+action+']').addClass('active')
 
-  # toggleButton = (action, state) ->
-  #   if (state)
-  #     $('a.mpd_'+action).addClass('active')
-  #   else
-  #     $('a.mpd_'+action).removeClass('active')
-
   ###
   On load
   ###
 
   updateMpdInfo()
-
-  # $.get '/playlist.json', (data) ->
-  #     $.cl data
-  #     template = _.template(tmpl['mpd-playlist'], {data: data})
-  #     $('#mpd-playlist').html(template)
-  #     return true
