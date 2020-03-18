@@ -130,12 +130,12 @@ $ ->
       console.log(data)
 
   updatePlayer = (data) ->
-    unless data['error']?
+    if data['artist']?
       template = _.template(tmpl['mpd-info'], {data: data})
       $('#mpd-info').html(template)
       artistImage data['artist'], (url) ->
         $("body").background url
-    else
+    else if data['error']?
       $('.alert').show()
       $('.alert-message').html(data['error'])
       $('#mpd-info').html('')
