@@ -26,16 +26,7 @@ class FirstSin < Sinatra::Base
 
   get '/playlist.json' do
     content_type :json
-    if $mpd.active?
-      $mpd.playlist.map do |file|
-        {
-          artist: file.artist,
-          title: file.title,
-          album: file.album,
-          id: file.id
-        }
-      end.to_json
-    end
+    $mpd.playlists.map(&:name).to_json if $mpd.connected?
   end
 
   get '/artist.json' do
@@ -49,6 +40,7 @@ class FirstSin < Sinatra::Base
       sorted.first.to_json
     end
   end
+
   get '/' do
     haml :index
   end
