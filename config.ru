@@ -29,12 +29,12 @@ Thread.new do
 
     $mpd.on :song do |song|
       $logger.info "MPD - #{song.artist} - #{song.title}"
-      $faye.publish('/first-sin/mpd', { info: $mpd.info, action: "mpd" } )
+      $faye&.publish('/first-sin/mpd', { info: $mpd.info, action: "mpd" } )
     end
 
     $mpd.on :state do |state|
       $logger.info "MPD - #{state}"
-      $faye.publish('/first-sin/mpd', { info: $mpd.info, action: "mpd" } )
+      $faye&.publish('/first-sin/mpd', { info: $mpd.info, action: "mpd" } )
     end
 
     begin
