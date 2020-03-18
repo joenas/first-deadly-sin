@@ -4,8 +4,6 @@ source 'https://rubygems.org'
 
 gem 'sinatra', '~> 2.0', '>= 2.0.8.1'
 gem 'sinatra-contrib'
-# For contrib
-# gem 'backports', '~> 3.17'
 
 gem 'celluloid', '0.17.4'
 gem 'celluloid-io', '0.17.3'
@@ -21,7 +19,6 @@ gem 'coffee-script'
 gem 'haml', '~> 4.0.0'
 gem 'sass'
 gem 'sinatra-asset-pipeline', '~> 2.2.0'
-gem 'yui-compressor', require: 'yui/compressor'
 
 gem 'json', '~> 2.3'
 gem 'therubyracer', '~> 0.12.3'
