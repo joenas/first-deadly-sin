@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'rspotify'
+RSpotify.authenticate(ENV['SPOTIFY_CLIENT_ID'], ENV['SPOTIFY_CLIENT_SECRET'])
+
 class FirstSin < Sinatra::Base
   not_found { haml :'404' }
   error do
@@ -35,6 +38,17 @@ class FirstSin < Sinatra::Base
     end
   end
 
+  get '/artist.json' do
+    content_type :json
+    artists = RSpotify::Artist.search(CGI.unescape(params[:artist]))
+    return if !artists || artists.empty?
+
+    artist = artists.first
+    unless artist.images.empty?
+      sorted = artist.images.sort { |a, b| a[:width] <=> b[:width] }
+      sorted.first.to_json
+    end
+  end
   get '/' do
     haml :index
   end

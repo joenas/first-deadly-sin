@@ -1,3 +1,4 @@
 *.min{css,js}
 config/app.yml
 .sass-cache
+.env

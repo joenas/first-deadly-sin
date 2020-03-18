@@ -9,6 +9,8 @@ gem 'celluloid', '0.17.4'
 gem 'celluloid-io', '0.17.3'
 gem 'eventmachine', '1.0.4'
 
+gem 'dotenv', '~> 2.7', '>= 2.7.5'
+
 # servers
 gem 'faye', '1.2.4'
 gem 'ruby-mpd'
@@ -22,3 +24,6 @@ gem 'sinatra-asset-pipeline', '~> 2.2.0'
 
 gem 'json', '~> 2.3'
 gem 'therubyracer', '~> 0.12.3'
+
+# images
+gem 'rspotify', '~> 2.8'

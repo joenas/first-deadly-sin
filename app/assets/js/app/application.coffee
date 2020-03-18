@@ -20,7 +20,7 @@ $ ->
       return callback()
 
     cb = ->
-      callback cache[artist].random()
+      callback cache[artist]
       return
 
     cache = artistImage.cache
@@ -31,22 +31,14 @@ $ ->
       setTimeout cb, 10
       return
     # Load
-    last_fm_uri = 'http://ws.audioscrobbler.com/2.0/?format=json&method=artist.getinfo&artist=%s&api_key=c5f3ecc4cebaf7129c6a39e718debeb1'
-    $.ajax
-      url: last_fm_uri.replace('%s', artist)
-      dataType: 'jsonp'
-      success: (obj) ->
-        console.log(obj)
-        if obj.artist.image
-          cache[artist] = $.map(obj.artist.image, (img) ->
-            if img.size == 'mega'
-              return img['#text']
-            return
-          )
-          cb()
-        else
-          callback()
-        return
+    $.get '/artist.json', {artist: artist}, (data) ->
+      if data.url
+        cache[artist] = data.url
+        cb()
+      else
+        callback()
+      return
+
     return
 
   artistImage.cache = {}
@@ -150,6 +142,7 @@ $ ->
       template = _.template(tmpl['mpd-info'], {data: data})
       $('#mpd-info').html(template)
       artistImage data['artist'], (url) ->
+        console.log(url)
         $("body").background url
     else
       $('.alert').show()

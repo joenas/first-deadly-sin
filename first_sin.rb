@@ -2,6 +2,7 @@
 
 require 'sinatra/reloader'
 require 'sinatra/asset_pipeline'
+require 'dotenv/load'
 
 class FirstSin < Sinatra::Base
   # Setup
