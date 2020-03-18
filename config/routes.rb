@@ -4,9 +4,14 @@ class FirstSin < Sinatra::Base
 
   get '/mpd.json' do
     content_type :json
-    if command = params[:action]
+    command = params[:action]
+    vol_change = params[:vol]
+    if command == 'pause'
+      puts 'paused', $mpd.paused?
+      $mpd.send(:pause=, !$mpd.paused?)
+    elsif command
       $mpd.send command
-    elsif vol_change = params[:vol]
+    elsif vol_change
       $mpd.send(vol_change, 5)
     end
     $mpd.info.to_json
