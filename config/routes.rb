@@ -49,6 +49,7 @@ class FirstSin < Sinatra::Base
     content_type :json
     status 404
     artist_name = CGI.unescape(params[:artist])
+    artist_name = artist_name.split(/feat.?/i)[0]
     artists = RSpotify::Artist.search(artist_name)
     return if !artists || artists.empty?
 
