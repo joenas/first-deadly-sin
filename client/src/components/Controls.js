@@ -30,7 +30,7 @@ function Control({ children, onClick, activeState, currentState }) {
 
 function Controls({ currentState }) {
   return (
-    <div className="btn-group" id="mpd-buttons">
+    <div id="controls">
       <Control
         onClick={() => {
           API.postCommand("previous");

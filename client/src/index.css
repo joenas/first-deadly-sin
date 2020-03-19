@@ -8,14 +8,9 @@ body {
   height: 100%;
   width: 100%;
   display: grid;
-  margin: 0;
 }
 
 .App {
-  display: flex;
-  flex: 2;
-  padding: 2em;
-  margin: 0;
   background-color: black;
   background-position: center center fixed no-repeat;
   background-repeat: bo-repeat;
@@ -23,8 +18,13 @@ body {
   background-size: cover;
   color: white;
   font: 1.5em Helvetica, sans-serif;
-  height: 100%;
-  width: 100%;
+}
+
+.wrapper {
+  padding: 2em;
+  padding-top: 2.5em;
+  z-index: 1;
+  text-align: left;
 }
 
 /* Overlay image */
@@ -43,24 +43,7 @@ body:before {
   z-index: 0;
 }
 
-.alert {
-  display: none;
-  margin: 1em auto;
-  width: auto;
-  max-width: 250px;
-}
-
-.alert .close {
-  z-index: 99;
-}
-
-#mpd-info {
-  margin-top: 10px;
-  z-index: 1
-}
-
-#mpd-buttons {
-  z-index: 1;
+#controls {
   position: absolute;
   bottom: 40px;
   opacity: 0.5;
@@ -73,14 +56,9 @@ body:before {
   border: 0.1em solid #222;
 }
 
-#mpd-buttons:hover {
+#controls:hover {
   opacity: 0.8;
-  z-index: 1;
 }
-
-/* h1 {
-  font-size: 200%;
-} */
 
 h1, h2, h3 {
   margin: 0;
@@ -139,10 +117,7 @@ button {
   body {
     padding: 1em;
   }
-  #mpd-playlist {
-    display: none;
-  }
-  #mpd-buttons {
+  #controls {
     opacity: 0.8;
     right: 40px;
   }
@@ -155,15 +130,12 @@ button {
   h3 {
     font-size: 70%;
   }
-  a {
-    font-size: 0.8em;
-  }
 }
 
 /* iPhone/Smartphone ~ Landscape */
 
 @media only screen and (min-width: 480px) and (max-width: 767px) {
-  #mpd-buttons {
+  #controls {
     bottom: 20px;
   }
 }
