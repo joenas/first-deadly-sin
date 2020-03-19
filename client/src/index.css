@@ -4,7 +4,9 @@ body {
   margin: 0;
 }
 
-.App, html, body {
+.App,
+html,
+body {
   height: 100%;
   width: 100%;
   display: grid;
@@ -12,8 +14,8 @@ body {
 
 .App {
   background-color: black;
-  background-position: center center fixed no-repeat;
-  background-repeat: bo-repeat;
+  background-position: center;
+  background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
   color: white;
@@ -60,7 +62,9 @@ body:before {
   opacity: 0.8;
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   margin: 0;
   padding: 0;
   text-shadow: black 0 0 7px;
@@ -93,21 +97,25 @@ button {
 
 /* http://techcline.com/2012/12/an-ultimate-css-boilerplate-for-your-next-responsive-design.html */
 
-@media all and (-webkit-min-device-pixel-ratio: 2) {}
+@media all and (-webkit-min-device-pixel-ratio: 2) {
+}
 
 /* ----------------------------------------------------------*/
 
 /* iPad */
 
-@media all and (device-width: 768px) and (device-height: 1024px) {}
+@media all and (device-width: 768px) and (device-height: 1024px) {
+}
 
 /* iPad ~ Portrait */
 
-@media all and (device-width: 768px) and (device-height: 1024px) and (orientation: portrait) {}
+@media all and (device-width: 768px) and (device-height: 1024px) and (orientation: portrait) {
+}
 
 /* iPad ~ Landscape */
 
-@media all and (device-width: 768px) and (device-height: 1024px) and (orientation: landscape) {}
+@media all and (device-width: 768px) and (device-height: 1024px) and (orientation: landscape) {
+}
 
 /* ----------------------------------------------------------*/
 
@@ -144,12 +152,15 @@ button {
 
 /* Other Smartphones / Small Screen ~ Portrait and Landscape */
 
-@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {}
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+}
 
 /* Other Smartphones / Small Screen ~  Landscape */
 
-@media only screen and (min-width: 321px) {}
+@media only screen and (min-width: 321px) {
+}
 
 /* Other Smartphones / Small Screen ~  Portrait */
 
-@media only screen and (max-width: 320px) {}
+@media only screen and (max-width: 320px) {
+}
