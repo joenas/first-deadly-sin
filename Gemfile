@@ -13,13 +13,7 @@ gem 'ruby-mpd'
 gem 'thin'
 
 # assets
-gem 'coffee-script'
-gem 'haml', '~> 5.1', '>= 5.1.2'
-gem 'sass'
-gem 'sinatra-asset-pipeline', '~> 2.2.0'
-
 gem 'json', '~> 2.3'
-gem 'therubyracer', '~> 0.12.3'
 
 # images
 gem 'rspotify', '~> 2.8'

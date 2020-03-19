@@ -1,0 +1,183 @@
+/* Body and body overlay from https://github.com/sunny/so-nice/blob/master/public/stylesheet.css */
+
+body {
+  margin: 0;
+}
+
+.App, html, body {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  margin: 0;
+}
+
+.App {
+  display: flex;
+  flex: 2;
+  padding: 2em;
+  margin: 0;
+  background-color: black;
+  background-position: center center fixed no-repeat;
+  background-repeat: bo-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  color: white;
+  font: 1.5em Helvetica, sans-serif;
+  height: 100%;
+  width: 100%;
+}
+
+/* Overlay image */
+
+body:before {
+  content: " ";
+  margin: 0;
+  padding: 0;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAADAQMAAABs5if8AAAAA3NCSVQICAjb4U/gAAAABlBMVEUAAAD///+l2Z/dAAAAAnRSTlP/AOW3MEoAAAAJcEhZcwAACusAAArrAYKLDVoAAAAWdEVYdENyZWF0aW9uIFRpbWUAMjUvMDQvMTHvvlk6AAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M1cbXjNgAAAA5JREFUCJljSGB4wPAAAAVmAiGdUf+vAAAAAElFTkSuQmCC);
+  opacity: 0.3;
+  z-index: 0;
+}
+
+.alert {
+  display: none;
+  margin: 1em auto;
+  width: auto;
+  max-width: 250px;
+}
+
+.alert .close {
+  z-index: 99;
+}
+
+#mpd-info {
+  margin-top: 10px;
+  z-index: 1
+}
+
+#mpd-buttons {
+  z-index: 1;
+  position: absolute;
+  bottom: 40px;
+  opacity: 0.5;
+  background: #222;
+  padding: 0.1em;
+  -webkit-border-radius: 0.4em;
+  -moz-border-radius: 0.4em;
+  -o-border-radius: 0.4em;
+  border-radius: 0.4em;
+  border: 0.1em solid #222;
+}
+
+#mpd-buttons:hover {
+  opacity: 0.8;
+  z-index: 1;
+}
+
+/* h1 {
+  font-size: 200%;
+} */
+
+h1, h2, h3 {
+  margin: 0;
+  padding: 0;
+  text-shadow: black 0 0 7px;
+}
+
+.svg-inline--fa {
+  color: white;
+}
+
+.svg-inline--fa.active {
+  color: #0e5895;
+}
+
+.svg-inline--fa:hover {
+  opacity: 0.6;
+}
+
+button {
+  background-color: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-size: 1.1em;
+  margin: 0 3px;
+  line-height: 1;
+  padding: 0;
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+/* http://techcline.com/2012/12/an-ultimate-css-boilerplate-for-your-next-responsive-design.html */
+
+@media all and (-webkit-min-device-pixel-ratio: 2) {}
+
+/* ----------------------------------------------------------*/
+
+/* iPad */
+
+@media all and (device-width: 768px) and (device-height: 1024px) {}
+
+/* iPad ~ Portrait */
+
+@media all and (device-width: 768px) and (device-height: 1024px) and (orientation: portrait) {}
+
+/* iPad ~ Landscape */
+
+@media all and (device-width: 768px) and (device-height: 1024px) and (orientation: landscape) {}
+
+/* ----------------------------------------------------------*/
+
+/* iPhone/Smartphone ~ Portrait */
+
+@media only screen and (max-width: 767px) {
+  body {
+    padding: 1em;
+  }
+  #mpd-playlist {
+    display: none;
+  }
+  #mpd-buttons {
+    opacity: 0.8;
+    right: 40px;
+  }
+  h1 {
+    font-size: 140%;
+  }
+  h2 {
+    font-size: 100%;
+  }
+  h3 {
+    font-size: 70%;
+  }
+  a {
+    font-size: 0.8em;
+  }
+}
+
+/* iPhone/Smartphone ~ Landscape */
+
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+  #mpd-buttons {
+    bottom: 20px;
+  }
+}
+
+/* ----------------------------------------------------------*/
+
+/* Other Smartphones / Small Screen ~ Portrait and Landscape */
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {}
+
+/* Other Smartphones / Small Screen ~  Landscape */
+
+@media only screen and (min-width: 321px) {}
+
+/* Other Smartphones / Small Screen ~  Portrait */
+
+@media only screen and (max-width: 320px) {}

@@ -4,10 +4,18 @@ require 'rspotify'
 RSpotify.authenticate(ENV['SPOTIFY_CLIENT_ID'], ENV['SPOTIFY_CLIENT_SECRET'])
 
 class FirstSin < Sinatra::Base
-  not_found { haml :'404' }
-  error do
-    @error = request.env['sinatra.error']
-    haml :'500'
+  not_found {}
+
+  # TODO: better way? for React
+  before do
+    headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
+    headers['Access-Control-Allow-Origin'] = '*'
+    headers['Access-Control-Allow-Headers'] = 'accept, authorization, origin'
+  end
+
+  options '*' do
+    response.headers['Allow'] = 'HEAD,GET,PUT,DELETE,OPTIONS,POST'
+    response.headers['Access-Control-Allow-Headers'] = 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Cache-Control, Accept'
   end
 
   get '/info' do
@@ -39,17 +47,20 @@ class FirstSin < Sinatra::Base
 
   get '/image' do
     content_type :json
-    artists = RSpotify::Artist.search(CGI.unescape(params[:artist]))
+    status 404
+    artist_name = CGI.unescape(params[:artist])
+    artists = RSpotify::Artist.search(artist_name)
     return if !artists || artists.empty?
 
     artist = artists.first
     unless artist.images.empty?
+      status 200
       sorted = artist.images.sort { |a, b| a[:width] <=> b[:width] }
       sorted.first.to_json
     end
   end
 
   get '/' do
-    haml :index
+    send_file File.join(settings.public_folder, 'index.html')
   end
 end
