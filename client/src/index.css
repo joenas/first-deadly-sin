@@ -12,25 +12,7 @@ body {
   display: grid;
 }
 
-.App {
-  background-color: black;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: cover;
-  color: white;
-  font: 1.5em Helvetica, sans-serif;
-}
-
-.wrapper {
-  padding: 2em;
-  padding-top: 2.5em;
-  z-index: 1;
-  text-align: left;
-}
-
 /* Overlay image */
-
 body:before {
   content: " ";
   margin: 0;
@@ -45,17 +27,36 @@ body:before {
   z-index: 0;
 }
 
+.App {
+  background-color: black;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  color: white;
+  font: 1.5em Helvetica, sans-serif;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2em;
+  padding-top: 2.5em;
+  text-align: left;
+  z-index: 1;
+}
+
 #controls {
-  position: absolute;
-  bottom: 40px;
-  opacity: 0.5;
+  align-self: flex-start;
   background: #222;
-  padding: 0.1em;
   -webkit-border-radius: 0.4em;
   -moz-border-radius: 0.4em;
   -o-border-radius: 0.4em;
   border-radius: 0.4em;
   border: 0.1em solid #222;
+  opacity: 0.5;
+  padding: 0.1em;
 }
 
 #controls:hover {
@@ -68,6 +69,7 @@ h3 {
   margin: 0;
   padding: 0;
   text-shadow: black 0 0 7px;
+  word-break: break-all;
 }
 
 .svg-inline--fa {
@@ -122,12 +124,13 @@ button {
 /* iPhone/Smartphone ~ Portrait */
 
 @media only screen and (max-width: 767px) {
-  body {
+  .wrapper {
     padding: 1em;
+    padding-bottom: 2em;
   }
-  #controls {
-    opacity: 0.8;
-    right: 40px;
+  #controls:hover {
+    opacity: 0.5;
+    align-self: center;
   }
   h1 {
     font-size: 140%;
@@ -135,17 +138,20 @@ button {
   h2 {
     font-size: 100%;
   }
-  h3 {
-    font-size: 70%;
+  button {
+    font-size: 1.4em;
+  }
+}
+
+@media only screen and (max-width: 320px) {
+  button {
+    font-size: 1em;
   }
 }
 
 /* iPhone/Smartphone ~ Landscape */
 
 @media only screen and (min-width: 480px) and (max-width: 767px) {
-  #controls {
-    bottom: 20px;
-  }
 }
 
 /* ----------------------------------------------------------*/
