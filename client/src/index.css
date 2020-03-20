@@ -69,7 +69,7 @@ h3 {
   margin: 0;
   padding: 0;
   text-shadow: black 0 0 7px;
-  word-break: break-all;
+  word-break: break-word;
 }
 
 .svg-inline--fa {
