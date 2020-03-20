@@ -16,11 +16,14 @@ You need to create a [Spotify application](https://developer.spotify.com/my-appl
 # Usage
 
 ```bash
-# Add your Spotify credentials
-cp .env.example .env
-
 # Build the client
 (cd client && yarn && yarn build)
+
+# Server #
+cd server
+
+# Add your Spotify credentials
+cp .env.example .env
 
 # Install gems
 bundle install
@@ -34,10 +37,12 @@ bundle exec thin start (-p port)
 
 # Docker
 
-To run the server in Docker, use the included `docker-compose.yaml`.
+To run the server in Docker, use the included `docker-compose.yml`.
+
+You also need to set `FAYE_SERVER_URL=http://faye:9292/faye` in `.env`, because of the internal network.
 
 ```bash
-# Choose whatever name you prefer, edit in docker-compose.yaml
+# Choose whatever name you prefer, edit in docker-compose.yml
 docker network create firstdeadlysin
 docker-compose build
 docker-compose up -d
@@ -45,21 +50,27 @@ docker-compose up -d
 
 # Development
 
-Either run the services separately
+Start the client
 
 ```
 # Client
 cd client
 yarn
 yarn start
-
-# Server
-bundle exec thin start -p $PORT
-rackup faye.ru -E production
 ```
 
-or start with Foreman
+Start servers, with Foreman
 
 ```bash
-foreman start -f Procfile.dev
+cd server
+foreman start -f Procfile
+```
+
+or separately
+
+```
+# Server
+cd server
+bundle exec thin start -p 4000
+rackup faye.ru -E production
 ```

@@ -6,8 +6,7 @@ require 'dotenv/load'
 class FirstSin < Sinatra::Base
   # Setup
   set :root, File.dirname(__FILE__)
-  set :views, (proc { File.join(root, 'app/views') })
-  set :public_folder, __dir__ + '/client/build'
+  set :public_folder, root + '/../client/build'
   enable :logging
   # set :environment, :production
 

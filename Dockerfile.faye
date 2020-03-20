@@ -8,7 +8,7 @@ RUN apt-get update -qq \
     && rm -rf /var/lib/apt /var/lib/dpkg /var/lib/cache /var/lib/log
 
 WORKDIR /usr/src/app
-COPY faye.ru ./
+COPY server/faye.ru ./
 
 RUN gem install faye rack thin
 ENV PORT=9292

@@ -21,14 +21,14 @@ RUN apt-get update -qq \
 # throw errors if Gemfile has been modified since Gemfile.lock
 RUN bundle config --global frozen 1
 
-WORKDIR /usr/src/app
+WORKDIR /app/server
 
-COPY Gemfile Gemfile.lock ./
+COPY server/Gemfile server/Gemfile.lock ./
 RUN bundle install
-COPY config.ru first_sin.rb ./
-COPY lib/ ./lib
-COPY config/ ./config
-COPY --from=builder /app/build /usr/src/app/client/build
+COPY server/config.ru server/first_sin.rb ./
+COPY server/lib/ ./lib
+COPY server/config/ ./config
+COPY --from=builder /app/build /app/client/build
 
 ENV PORT=4000
 EXPOSE 4000

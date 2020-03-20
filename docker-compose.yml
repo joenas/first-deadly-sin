@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile.server
     env_file:
-      - .env
+      - ./server/.env
     ports:
       - "4000:4000"
     environment:
@@ -16,7 +16,7 @@ services:
       context: .
       dockerfile: Dockerfile.faye
     env_file:
-      - .env
+      - ./server/.env
     ports:
       - "9292:9292"
     environment:
