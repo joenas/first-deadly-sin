@@ -48,6 +48,40 @@ docker-compose build
 docker-compose up -d
 ```
 
+If you want to build the images and start them yourself, for example if you don't want to keep the source code.
+
+```bash
+docker build -t first-deadly-sin_web -f Dockerfile.server .
+docker build -t first-deadly-sin_faye -f Dockerfile.faye .
+```
+
+Then use as such
+
+```yaml
+version: "3.2"
+services:
+  web:
+    image: first-deadly-sin_web
+    env_file:
+      - ./.env
+    ports:
+      - "4000:4000"
+    environment:
+      PORT: 4000
+
+  faye:
+    image: first-deadly-sin_faye
+    env_file:
+      - ./.env
+    ports:
+      - "9292:9292"
+
+networks:
+  default:
+    external:
+      name: firstdeadlysin
+```
+
 # Development
 
 Start the client
