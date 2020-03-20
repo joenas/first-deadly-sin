@@ -1,15 +1,17 @@
 
-FROM ruby:2.7.0
+FROM ruby:2.7.0-slim
 
-# throw errors if Gemfile has been modified since Gemfile.lock
-RUN bundle config --global frozen 1
+# Install build tools
+RUN apt-get update -qq \
+    && apt-get install -y build-essential \
+    && apt-get clean autoclean && apt-get autoremove -y \
+    && rm -rf /var/lib/apt /var/lib/dpkg /var/lib/cache /var/lib/log
 
 WORKDIR /usr/src/app
+COPY faye.ru ./
 
-COPY Gemfile Gemfile.lock faye.ru ./
-RUN bundle install
-
+RUN gem install faye rack thin
 ENV PORT=9292
 EXPOSE 9292
 
-CMD bundle exec rackup faye.ru -E production
+CMD rackup faye.ru -E production
