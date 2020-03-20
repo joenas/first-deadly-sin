@@ -1,0 +1,3 @@
+server: bundle exec thin start -p $PORT
+client: (cd client && yarn start)
+faye: rackup faye.ru -E production

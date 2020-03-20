@@ -16,7 +16,7 @@ You need to create a [Spotify application](https://developer.spotify.com/my-appl
 # Usage
 
 ```bash
-# Add your Spotify and MPD credentials
+# Add your Spotify credentials
 cp .env.example .env
 
 # Build the client
@@ -26,7 +26,7 @@ cp .env.example .env
 bundle install
 
 # Start server
-foreman start (-p port)
+foreman start
 
 # or if you already have Faye running (on port 9292)
 bundle exec thin start (-p port)
@@ -41,4 +41,25 @@ To run the server in Docker, use the included `docker-compose.yaml`.
 docker network create firstdeadlysin
 docker-compose build
 docker-compose up -d
+```
+
+# Development
+
+Either run the services separately
+
+```
+# Client
+cd client
+yarn
+yarn start
+
+# Server
+bundle exec thin start -p $PORT
+rackup faye.ru -E production
+```
+
+or start with Foreman
+
+```bash
+foreman start -f Procfile.dev
 ```

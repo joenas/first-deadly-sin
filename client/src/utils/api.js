@@ -1,24 +1,21 @@
-// TODO: env or something
-const HOST = "http://localhost:4000";
-
 const formHeaders = {
   "Content-Type": "application/x-www-form-urlencoded"
 };
 
 async function fetchInfo() {
-  const res = await fetch(`${HOST}/info`);
+  const res = await fetch(`/info`);
   const json = await res.json();
   return json;
 }
 
 async function fetchImage(artist) {
-  const res = await fetch(`${HOST}/image?artist=${artist}`);
+  const res = await fetch(`/image?artist=${artist}`);
   const json = await res.json();
   return json;
 }
 
 async function postCommand(action) {
-  const res = await fetch(`${HOST}/command`, {
+  const res = await fetch(`/command`, {
     method: "POST",
     headers: formHeaders,
     body: `action=${action}`
@@ -27,7 +24,7 @@ async function postCommand(action) {
   return json;
 }
 async function postVolume(change) {
-  const res = await fetch(`${HOST}/volume`, {
+  const res = await fetch(`/volume`, {
     method: "POST",
     headers: formHeaders,
     body: `vol=${change}`

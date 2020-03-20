@@ -2,8 +2,7 @@ import Faye from "faye";
 
 function fayeSubscription(channel, subscriptionCallback, statusCallback) {
   const client = new Faye.Client(
-    // "http://" + location.hostname + ":9292/faye"
-    "http://localhost:9292/faye"
+    "http://" + window.location.hostname + ":9292/faye"
   );
   const subscription = client.subscribe(
     channel,
