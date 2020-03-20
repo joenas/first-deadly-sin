@@ -1,0 +1,31 @@
+# Fetch node_modules for backend
+FROM node:8.14.0-alpine as builder
+RUN mkdir /app
+WORKDIR /app
+ENV PATH /app/node_modules/.bin:$PATH
+ADD client/package.json /app/package.json
+ADD client/yarn.lock /app/yarn.lock
+ADD client/src /app/src
+ADD client/public /app/public
+RUN yarn
+RUN yarn build
+
+#FROM ruby:2.7.0-alpine3.10
+FROM ruby:2.7.0
+
+# throw errors if Gemfile has been modified since Gemfile.lock
+RUN bundle config --global frozen 1
+
+WORKDIR /usr/src/app
+
+COPY Gemfile Gemfile.lock ./
+RUN bundle install
+COPY config.ru first_sin.rb ./
+COPY lib/ ./lib
+COPY config/ ./config
+COPY --from=builder /app/build /usr/src/app/client/build
+
+ENV PORT=4000
+EXPOSE 4000
+
+CMD bundle exec thin start -p $PORT

@@ -31,3 +31,14 @@ foreman start (-p port)
 # or if you already have Faye running (on port 9292)
 bundle exec thin start (-p port)
 ```
+
+# Docker
+
+To run the server in Docker, use the included `docker-compose.yaml`.
+
+```bash
+# Choose whatever name you prefer, edit in docker-compose.yaml
+docker network create firstdeadlysin
+docker-compose build
+docker-compose up -d
+```

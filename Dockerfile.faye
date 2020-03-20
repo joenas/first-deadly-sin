@@ -1,0 +1,15 @@
+
+FROM ruby:2.7.0
+
+# throw errors if Gemfile has been modified since Gemfile.lock
+RUN bundle config --global frozen 1
+
+WORKDIR /usr/src/app
+
+COPY Gemfile Gemfile.lock faye.ru ./
+RUN bundle install
+
+ENV PORT=9292
+EXPOSE 9292
+
+CMD bundle exec rackup faye.ru -E production

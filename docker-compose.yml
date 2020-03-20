@@ -1,0 +1,28 @@
+version: "3.2"
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    env_file:
+      - .env
+    ports:
+      - "4000:4000"
+    environment:
+      PORT: 4000
+
+  faye:
+    build:
+      context: .
+      dockerfile: Dockerfile.faye
+    env_file:
+      - .env
+    ports:
+      - "9292:9292"
+    environment:
+      PORT: 9292
+
+networks:
+  default:
+    external:
+      name: firstdeadlysin

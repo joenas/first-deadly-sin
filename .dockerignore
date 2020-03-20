@@ -1,0 +1,9 @@
+/.git/
+.gitignore
+.env*
+docker-compose.yml
+Dockerfile*
+LICENSE
+README.md
+*.tar
+Procfile
