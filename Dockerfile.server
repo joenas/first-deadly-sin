@@ -1,0 +1,36 @@
+# Fetch node_modules for backend
+FROM node:10.19.0-alpine as builder
+RUN mkdir /app
+WORKDIR /app
+ENV PATH /app/node_modules/.bin:$PATH
+ADD client/package.json /app/package.json
+ADD client/yarn.lock /app/yarn.lock
+ADD client/src /app/src
+ADD client/public /app/public
+RUN yarn
+RUN yarn build
+
+FROM ruby:2.7.0-slim
+
+# Install build tools
+RUN apt-get update -qq \
+    && apt-get install -y build-essential \
+    && apt-get clean autoclean && apt-get autoremove -y \
+    && rm -rf /var/lib/apt /var/lib/dpkg /var/lib/cache /var/lib/log
+
+# throw errors if Gemfile has been modified since Gemfile.lock
+RUN bundle config --global frozen 1
+
+WORKDIR /app/server
+
+COPY server/Gemfile server/Gemfile.lock ./
+RUN bundle install
+COPY server/config.ru server/first_sin.rb ./
+COPY server/lib/ ./lib
+COPY server/config/ ./config
+COPY --from=builder /app/build /app/client/build
+
+ENV PORT=4000
+EXPOSE 4000
+
+CMD bundle exec thin start -p $PORT

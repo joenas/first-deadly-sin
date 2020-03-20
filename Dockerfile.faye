@@ -1,0 +1,17 @@
+
+FROM ruby:2.7.0-slim
+
+# Install build tools
+RUN apt-get update -qq \
+    && apt-get install -y build-essential \
+    && apt-get clean autoclean && apt-get autoremove -y \
+    && rm -rf /var/lib/apt /var/lib/dpkg /var/lib/cache /var/lib/log
+
+WORKDIR /usr/src/app
+COPY server/faye.ru ./
+
+RUN gem install faye rack thin
+ENV PORT=9292
+EXPOSE 9292
+
+CMD rackup faye.ru -E production
