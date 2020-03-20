@@ -128,9 +128,11 @@ button {
     padding: 1em;
     padding-bottom: 2em;
   }
+  #controls {
+    align-self: center;
+  }
   #controls:hover {
     opacity: 0.5;
-    align-self: center;
   }
   h1 {
     font-size: 140%;
