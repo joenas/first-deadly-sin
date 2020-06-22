@@ -9,7 +9,7 @@ GEM
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
     dotenv (2.7.5)
-    em-http-request (1.1.5)
+    em-http-request (1.1.6)
       addressable (>= 2.3.4)
       cookiejar (!= 0.3.1)
       em-socksify (>= 0.3)
@@ -17,10 +17,10 @@ GEM
       http_parser.rb (>= 0.6.0)
     em-socksify (0.3.2)
       eventmachine (>= 1.0.0.beta.4)
-    eventmachine (1.0.4)
+    eventmachine (1.2.7)
     faraday (1.0.0)
       multipart-post (>= 1.2, < 3)
-    faye (1.2.4)
+    faye (1.2.5)
       cookiejar (>= 0.3.0)
       em-http-request (>= 0.3.0)
       eventmachine (>= 0.12.0)
@@ -59,7 +59,7 @@ GEM
       oauth2 (~> 1.1)
       omniauth (~> 1.2)
     public_suffix (3.1.1)
-    rack (2.2.2)
+    rack (2.2.3)
     rack-protection (2.0.8.1)
       rack
     rest-client (2.0.2)
@@ -92,16 +92,16 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.6)
-    websocket-driver (0.7.1)
+    websocket-driver (0.7.2)
       websocket-extensions (>= 0.1.0)
-    websocket-extensions (0.1.4)
+    websocket-extensions (0.1.5)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   dotenv (~> 2.7, >= 2.7.5)
-  faye (= 1.2.4)
+  faye (= 1.2.5)
   json (~> 2.3)
   rspotify (~> 2.8)
   ruby-mpd
