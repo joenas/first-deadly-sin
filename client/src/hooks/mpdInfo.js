@@ -9,7 +9,7 @@ function useMpdInfo() {
   const getMdpInfo = useCallback(async () => {
     try {
       const data = await API.fetchInfo();
-      setMpdInfo(data);
+      if (data.state !== 'stop') setMpdInfo(data);
     } catch (e) {
       console.error(e);
     }
@@ -17,7 +17,6 @@ function useMpdInfo() {
 
   useEffect(() => {
     const updateMpdInfo = msg => {
-      console.log({ faye: msg });
       setMpdInfo(msg["info"]);
     };
     return fayeSubscription("/first-sin/mpd", updateMpdInfo, setFayeConnected);

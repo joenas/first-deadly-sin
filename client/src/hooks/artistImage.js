@@ -3,6 +3,7 @@ import API from "../utils/api";
 
 function useArtistImage({ artist }) {
   const [imageCache, setImageCache] = useState({});
+  const [lastArtist, setLastArtist] = useState(null)
 
   const getArtistImage = useCallback(async () => {
     try {
@@ -15,11 +16,13 @@ function useArtistImage({ artist }) {
 
   useEffect(() => {
     if (artist && !imageCache[artist]) {
+      setLastArtist(artist)
       getArtistImage();
     }
   }, [artist, imageCache, getArtistImage]);
 
-  return imageCache[artist];
+  // To prevent image flashing when changing track (MPD sets state to 'stop' for a split second)
+  return imageCache[artist || lastArtist];
 }
 
 export default useArtistImage;
