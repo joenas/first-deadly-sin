@@ -1,7 +1,7 @@
 import React from "react";
 
 function SongInfo({ mpdInfo: { artist, title } }) {
-  if (!(artist || title)) return null;
+  // if (!(artist || title)) return null;
   return (
     <div>
       <h1>{title}</h1>
