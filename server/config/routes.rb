@@ -26,10 +26,14 @@ class FirstSin < Sinatra::Base
   post '/command' do
     content_type :json
     command = params[:action]
-    if command == 'pause'
-      res = $mpd.send(:pause=, !$mpd.paused?)
-    elsif command
-      res = $mpd.send command
+    begin
+      if command == 'pause'
+        res = $mpd.send(:pause=, !$mpd.paused?)
+      elsif command
+        res = $mpd.send_command command
+      end
+    rescue MPD::NotPlaying
+      res = false
     end
     { success: res }.to_json
   end
