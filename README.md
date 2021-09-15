@@ -108,3 +108,9 @@ cd server
 bundle exec thin start -p 4000
 rackup faye.ru -E production
 ```
+
+
+## Gotchas
+
+- Error installing `thin` on macOS Big Sur - [link](https://github.com/macournoyer/thin/issues/365#issuecomment-692063842)
+- Use `0.0.0.0` for Faye - [link](https://github.com/faye/faye/commit/fc6481be4374845c45ba3b5222efed43c378a505)

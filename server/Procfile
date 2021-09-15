@@ -1,2 +1,2 @@
 app: bundle exec thin start -p 4000
-faye: rackup faye.ru -E production
+faye: rackup faye.ru -s thin -E production
