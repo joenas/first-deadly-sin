@@ -101,7 +101,7 @@ PLATFORMS
 
 DEPENDENCIES
   dotenv (~> 2.7, >= 2.7.5)
-  faye (>= 1.2.5)
+  faye (~> 1.4)
   json (~> 2.3)
   rspotify (~> 2.8)
   ruby-mpd
