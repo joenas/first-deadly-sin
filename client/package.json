@@ -13,7 +13,8 @@
   },
   "resolutions": {
     "browserslist": "^4.16.5",
-    "immer": "^9.0.6"
+    "immer": "^9.0.6",
+    "glob-parent": "^5.1.2"
   },
   "scripts": {
     "start": "react-scripts start",
